@@ -64,7 +64,7 @@ void cmd_help(){
     printf("Works with signing technology on iOS devices\n\n");
     printf("  -d, --device MODEL\t\tspecific device by its MODEL (eg. iPhone11,8)\n");
     printf("  -i, --ios VERSION\t\tspecific iOS version (eg. 12.1.2)\n");
-    printf("      --buildid BUILDID\t\tspecific buildid instead of iOS version (eg. 16C404)\n");
+    printf("      --buildid BUILDID\t\tspecific buildid instead of iOS version (eg. 16C104)\n");
     printf("  -B, --boardconfig BOARD\tspecific boardconfig instead of iPhone model (eg. n841ap)\n");
     printf("  -h, --help\t\t\tprints usage information\n");
     printf("  -o, --ota\t\t\tcheck OTA signing status, instead of normal restore\n");
