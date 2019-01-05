@@ -184,12 +184,23 @@ static struct bbdevice bbdevices[] = {
     {"iPad7,3", 0, 0}, // iPad Pro (10,5", Wi-Fi)
     {"iPad7,4", 2315222105, 4}, // iPad Pro (10,5", Cellular)
     {"iPad7,5", 0, 0}, // iPad (6th gen, 2018, Wi-Fi)
+    {"iPad8,1", 0, 0}, // iPad Pro (11", Wi-Fi)
+    {"iPad8,2", 0, 0}, // iPad Pro (11", 1 TB model, Wi-Fi)
+    {"iPad8,5", 0, 0}, // iPad Pro (12,9", 3rd gen, Wi-Fi)
+    {"iPad8,6", 0, 0}, // iPad Pro (12,9", 3rd gen, 1 TB model, Wi-Fi)
+    
+    // Apple Watches
+    {"Watch3,3", 0, 0}, // Apple Watch Series 3 (38mm)
+    {"Watch3,4", 0, 0}, // Apple Watch Series 3 (42mm)
+    {"Watch4,1", 0, 0}, // Apple Watch Series 4 (40mm)
+    {"Watch4,2", 0, 0}, // Apple Watch Series 4 (44mm)
     
     // Apple TVs
     {"AppleTV2,1", 0, 0}, // 2nd gen
     {"AppleTV3,1", 0, 0}, // 3rd gen
     {"AppleTV3,2", 0, 0}, // 3rd gen (2013)
     {"AppleTV5,3", 0, 0}, // 4th gen
+    {"AppleTV6,2", 0, 0}, // 4K
     {NULL, 0, 0}
 };
 
