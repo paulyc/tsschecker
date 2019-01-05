@@ -194,6 +194,7 @@ static struct bbdevice bbdevices[] = {
     {"Watch4,2", 0, 0}, // Apple Watch Series 4 (44mm)
     
     // Apple TVs
+    {"AppleTV1,1", 0, 0}, // 1st gen
     {"AppleTV2,1", 0, 0}, // 2nd gen
     {"AppleTV3,1", 0, 0}, // 3rd gen
     {"AppleTV3,2", 0, 0}, // 3rd gen (2013)
