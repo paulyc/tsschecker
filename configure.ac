@@ -1,6 +1,5 @@
 AC_PREREQ([2.69])
-AC_INIT([tsschecker], [1.0], [https://github.com/encounter/tsschecker/issues],, [https://github.com/encounter/tsschecker])
-# prepare for automake
+AC_INIT([tsschecker], [1.0], [https://github.com/s0uthwest/tsschecker/issues])
 AM_INIT_AUTOMAKE([foreign])
 
 AC_CONFIG_SRCDIR([tsschecker/tsschecker.h])
@@ -14,8 +13,11 @@ AC_PROG_LIBTOOL
 
 AC_CONFIG_MACRO_DIRS([m4])
 
-# Checks for libraries.
+# Version bump
+CFLAGS+=" -D TSSCHECKER_VERSION_COMMIT_COUNT=\\\"$(git rev-list --count HEAD | tr -d '\n')\\\""
+CFLAGS+=" -D TSSCHECKER_VERSION_COMMIT_SHA=\\\"$(git rev-parse HEAD | tr -d '\n')\\\""
 
+# Checks for libraries.
 AC_CANONICAL_HOST
 
 AC_ARG_WITH(
@@ -41,7 +43,6 @@ AS_IF([test "x$with_libcrypto" != xno],
     [PKG_CHECK_MODULES(libcrypto, libcrypto >= 1.0)]
 )
 PKG_CHECK_MODULES(libirecovery, libirecovery >= 0.2.0)
-
 
 # Checks for header files.
 AC_CHECK_HEADERS([stddef.h stdlib.h string.h unistd.h])
@@ -85,4 +86,3 @@ AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
 AC_CONFIG_FILES([Makefile tsschecker/Makefile])
 AC_OUTPUT
-

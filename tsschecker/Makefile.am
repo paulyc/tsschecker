@@ -15,11 +15,11 @@ libtsschecker_la_SOURCES = tsschecker.c tss.c download.c
 libtsschecker_la_CFLAGS = $(AM_CFLAGS)
 libtsschecker_la_LIBADD = $(AM_LDFLAGS) libjssy.a
 else
-bin_PROGRAMS	= tsschecker
+bin_PROGRAMS = tsschecker
 tsschecker_CFLAGS = $(AM_CFLAGS)
 if WIN32
 tsschecker_LDFLAGS = -all-static -static-libgcc -static-libstdc++ $(AM_LDFLAGS)
 endif
 tsschecker_LDADD = $(AM_LDFLAGS) libjssy.a
-tsschecker_SOURCES	= tsschecker.c tss.c download.c main.c
+tsschecker_SOURCES = tsschecker.c tss.c download.c main.c
 endif

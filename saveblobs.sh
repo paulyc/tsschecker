@@ -52,12 +52,12 @@ while read device; do
 		if [ $code -eq 0 ]; then echo " ok"; else echo " failed"; echo $ret;fi
 	done
 
-	echo -n "saving ota blob ... "
+	echo -n "saving OTA blob ... "
 	ret=$(tsschecker -d $model -e $ecid -s --save-path shsh_ota -l -o $hw);code=$?
 	echo "$ret" >>/tmp/tsschecker_saveblobs_fullog.log
 	echo -n $(echo $ret | grep -o "iOS .* for device" | rev | cut -c 12- | rev )
 	if [ $code -eq 0 ]; then echo " ok"; else echo " failed"; echo $ret;fi
-	echo -n "saving beta ota blob ... "
+	echo -n "saving OTA blob for beta version... "
 	ret=$(tsschecker -d $model -e $ecid -s --save-path shsh_beta_ota -l -o --beta $hw);code=$?
 	echo "$ret" >>/tmp/tsschecker_saveblobs_fullog.log
 	echo -n $(echo $ret | grep -o "iOS .* for device" | rev | cut -c 12- | rev )

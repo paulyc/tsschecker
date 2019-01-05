@@ -20,7 +20,7 @@
 #include <ctype.h>
 #include "download.h"
 #include "tsschecker.h"
-#include "all_tsschecker.h"
+#include "all.h"
 
 #define FLAG_LIST_IOS       1 << 0
 #define FLAG_LIST_DEVICES   1 << 1
@@ -29,7 +29,6 @@
 
 int idevicerestore_debug;
 #define reterror(code,a ...) {error(a); err = code; goto error;}
-
 
 static struct option longopts[] = {
     { "build-manifest",     required_argument, NULL, 'm' },
@@ -151,7 +150,7 @@ char *parseNonce(const char *nonce, size_t *parsedLen){
 int main(int argc, const char * argv[]) {
     int err = 0;
     int isSigned = 0;
-    printf("Version: "VERSION_COMMIT_SHA" - "VERSION_COMMIT_COUNT"\n");
+    printf("Version: "TSSCHECKER_VERSION_COMMIT_SHA" - "TSSCHECKER_VERSION_COMMIT_COUNT"\n"); // versioning
     
     dbglog = 1;
     idevicerestore_debug = 0;
