@@ -1,5 +1,5 @@
 //
-//  ipswme.h
+//  tsschecker.h
 //  tsschecker
 //
 //  Created by tihmstar on 07.01.16.
@@ -100,10 +100,8 @@ int isManifestSignedForDevice(const char *buildManifestPath, t_devicevals *devVa
 int isManifestBufSignedForDevice(char *buildManifestBuffer, t_devicevals *devVals, t_basebandMode basebandMode);
 int isVersionSignedForDevice(jssytok_t *firmwareTokens, t_iosVersion *versVals, t_devicevals *devVals);
 
-
 jssytok_t *getFirmwaresForDevice(const char *device, jssytok_t *tokens, int isOta);
 
-    
 int checkFirmwareForDeviceExists(t_devicevals *devVals, t_iosVersion *versVals, jssytok_t *tokens);
 
 int downloadPartialzip(const char *url, const char *file, const char *dst);
@@ -114,9 +112,8 @@ plist_t getBuildidentity(plist_t buildManifest, const char *model, int isUpdateI
 plist_t getBuildidentityWithBoardconfig(plist_t buildManifest, const char *boardconfig, int isUpdateInstall);
 
 
-    
 #ifdef __cplusplus
 }
 #endif
     
-#endif /* tsscheker_h */
+#endif /* tsschecker_h */
