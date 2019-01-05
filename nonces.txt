@@ -1,0 +1,18 @@
+Recommmended save blobs with this generators:
+0x9d0b5b5ff92fff23
+0xbd34a880be0b53f3
+0x4bb8834ba6444b50
+0x698337f5a79c3292
+0xedeeb72d7575e360
+0x0000000000000000
+
+Recovery collision APNonces:
+9e4c518009d00df190a450b3b47691768812360c
+9f4aeec726e7c682339ddb3c6c2dec52662dc517
+
+DFU collision APNonces (not for all devices/firmwares, some collisioned):
+6b83f831a6305ae90d57a78ba8eb9d81e7a9058f
+6b81a2c3cdf87404dee28330f7fcb0ee62c425a1
+778282f0cf6e5234446d88ebc5dcfde81f415b57 
+7ce1657233867e988e1b48988ef98fc28ddf20f5
+198365e19ea223bd73ee27faa555ca24ac6ed65d
