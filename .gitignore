@@ -1,4 +1,5 @@
-*.patch
+.DS_Store
+.patch
 *.diff
 .*.swp
 Makefile
@@ -14,12 +15,15 @@ config.status
 config.guess
 config.sub
 configure
+devices.txt
+external/.DS_Store
 install-sh
 libtool
 ltmain.sh
 m4
 missing
-tsschecker/all_tsschecker.h
+tsschecker/.DS_Store
+tsschecker/all.h.bak
 tsschecker/*.a
 tsschecker/*.o
 tsschecker/*.la
