@@ -61,37 +61,37 @@ static struct option longopts[] = {
 
 void cmd_help(){
     printf("Usage: tsschecker [OPTIONS]\n");
-    printf("Checks (real) signing status of device/firmware\n\n");
-    
-    printf("  -d, --device MODEL\t\tspecific device by its MODEL (eg. iPhone4,1)\n");
-    printf("  -i, --ios VERSION\t\tspecific iOS version (eg. 6.1.3)\n");
-    printf("      --buildid BUILDID\t\tspecific buildid instead of iOS version (eg. 13C75)\n");
-    printf("  -B, --boardconfig BOARD\tspecific boardconfig instead of iPhone model (eg. n61ap)\n");
+    printf("Works with signing technology on iOS devices\n\n");
+    printf("  -d, --device MODEL\t\tspecific device by its MODEL (eg. iPhone11,8)\n");
+    printf("  -i, --ios VERSION\t\tspecific iOS version (eg. 12.1.2)\n");
+    printf("      --buildid BUILDID\t\tspecific buildid instead of iOS version (eg. 16C404)\n");
+    printf("  -B, --boardconfig BOARD\tspecific boardconfig instead of iPhone model (eg. n841ap)\n");
     printf("  -h, --help\t\t\tprints usage information\n");
     printf("  -o, --ota\t\t\tcheck OTA signing status, instead of normal restore\n");
     printf("  -b, --no-baseband\t\tdon't check baseband signing status. Request a ticket without baseband\n");
-    printf("  -m, --build-manifest\t\tmanually specify buildmanifest. (can be used with -d)\n");
-    printf("  -s, --save\t\t\tsave fetched shsh blobs (mostly makes sense with -e)\n");
-    printf("  -u, --update-install\t\t\trequest update ticket instead of erase\n");
+    printf("  -m, --build-manifest\t\tmanually specify BuildManifest (can be used with -d)\n");
+    printf("  -s, --save\t\t\tsave fetched signing blobs (mostly makes sense with -e)\n");
+    printf("  -u, --update-install\t\t\trequest update blob instead of erase\n");
     printf("  -l, --latest\t\t\tuse latest public iOS version instead of manually specifying one\n");
     printf("                 \t\tespecially useful with -s and -e for saving blobs\n");
     printf("  -e, --ecid ECID\t\tmanually specify ECID to be used for fetching blobs, instead of using random ones\n");
     printf("                 \t\tECID must be either dec or hex eg. 5482657301265 or ab46efcbf71\n");
-    printf("      --apnonce NONCE\t\tmanually specify APNONCE instead of using random one (not required for saving blobs)\n");
-    printf("      --sepnonce NONCE\t\tmanually specify SEPNONCE instead of using random one (not required for saving blobs)\n");
+    printf("      --apnonce NONCE\t\tmanually specify ApNonce instead of using random one (not required for saving blobs)\n");
+    printf("      --sepnonce NONCE\t\tmanually specify sepNonce instead of using random one (not required for saving blobs)\n");
     printf("      --bbsnum SNUM\t\tmanually specify BbSNUM, in hex, for saving valid BBTicket\n");
     printf("      --save-path PATH\t\tspecify path for saving blobs\n");
     printf("      --generator GEN\t\tmanually specify generator in format 0x%%16llx\n");
     printf("  -h, --help\t\t\tprints usage information\n");
-    printf("      --beta\t\t\trequest ticket for beta instead of normal relase (use with -o)\n");
+    printf("      --beta\t\t\trequest ticket for beta instead of normal release (use with -o)\n");
     printf("      --list-devices\t\tlist all known devices\n");
-    printf("      --list-ios\t\tlist all known ios versions\n");
+    printf("      --list-ios\t\tlist all known iOS versions\n");
     printf("      --nocache \t\tignore caches and redownload required files\n");
     printf("      --print-tss-request\n");
     printf("      --print-tss-response\n");
-    printf("      --raw\t\t\tsend raw file to Apple's tss server (useful for debugging)\n");
+    printf("      --raw\t\t\tsend raw file to Apple's TSS server (useful for debugging)\n");
     printf("\n");
-    printf("Homepage: <" PACKAGE_URL ">\n");
+    printf("Homepage: <https://github.com/s0uthwest/tsschecker>\n");
+    printf("Original project: <https://github.com/tsschecker/tsschecker>\n");
 }
 
 int64_t parseECID(const char *ecid){
@@ -441,8 +441,6 @@ int main(int argc, const char * argv[]) {
             reterror(-69, "[TSSC] checking tss status failed!\n");
         }
     }
-    
-    
     
 error:
     if (devVals.deviceBoard) free(devVals.deviceBoard);
