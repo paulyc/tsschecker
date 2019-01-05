@@ -94,14 +94,12 @@ static const char *win_path_get(enum paths path){
 #define DIRECTORY_DELIMITER_STR "/"
 #define DIRECTORY_DELIMITER_CHR '/'
 
-
 #include <sys/stat.h>
 #define __mkdir(path, mode) mkdir(path, mode)
 
 #endif
 
-#pragma mark getJson functions
-
+/* getJson functions */
 int dbglog = 0;
 int print_tss_request = 0;
 int print_tss_response = 0;
@@ -240,8 +238,7 @@ char *getOtaJson(){
     return fJson;
 }
 
-#pragma mark more get functions
-
+/* more get functions */
 const char *getBoardconfigFromModel(const char *model){
     const char *rt = NULL;
     irecv_device_t table = irecv_devices_get_all();
@@ -346,9 +343,7 @@ error:
 #undef reterror
 }
 
-
-#pragma mark json functions
-
+/* json functions */
 long parseTokens(const char *json, jssytok_t **tokens){
     
     log("[JSON] counting elements\n");
@@ -359,8 +354,7 @@ long parseTokens(const char *json, jssytok_t **tokens){
     return jssy_parse(json, strlen(json), *tokens, sizeof(jssytok_t) * tokensCnt);
 }
 
-#pragma mark get functions
-
+/* get functions (again) */
 //returns NULL terminated array of t_versionURL objects
 t_versionURL *getFirmwareUrls(const char *deviceModel, t_iosVersion *versVals, jssytok_t *tokens){
     t_versionURL *rets = NULL;
@@ -545,16 +539,15 @@ void getRandNum(char *dst, size_t size, int base){
     }
 }
 
-#pragma mark tss functions
-
+/* TSS functions */
 int tss_populate_devicevals(plist_t tssreq, uint64_t ecid, char *nonce, size_t nonce_size, char *sep_nonce, size_t sep_nonce_size, int image4supported){
     
-    plist_dict_set_item(tssreq, "ApECID", plist_new_uint(ecid)); //0000000000000000
+    plist_dict_set_item(tssreq, "ApECID", plist_new_uint(ecid));
     if (nonce) {
-        plist_dict_set_item(tssreq, "ApNonce", plist_new_data(nonce, nonce_size));//aa aa aa aa bb cc dd ee ff 00 11 22 33 44 55 66 77 88 99 aa
+        plist_dict_set_item(tssreq, "ApNonce", plist_new_data(nonce, nonce_size));
     }
     
-    if (sep_nonce) {//aa aa aa aa bb cc dd ee ff 00 11 22 33 44 55 66 77 88 99 aa
+    if (sep_nonce) {
         plist_dict_set_item(tssreq, "ApSepNonce", plist_new_data(sep_nonce, sep_nonce_size));
     }
     
@@ -591,7 +584,7 @@ int tss_populate_basebandvals(plist_t tssreq, plist_t tssparameters, int64_t BbG
     
 
     /* BasebandNonce not required */
-//    plist_dict_set_item(parameters, "BbNonce", plist_new_data(bbnonce, NONCELEN_BASEBAND));
+//  plist_dict_set_item(parameters, "BbNonce", plist_new_data(bbnonce, NONCELEN_BASEBAND));
     plist_dict_set_item(parameters, "BbGoldCertId", plist_new_uint(BbGoldCertId));
     plist_dict_set_item(parameters, "BbSNUM", plist_new_data((char *)BbSNUM, bbsnumSize));
 
@@ -663,7 +656,7 @@ int tss_populate_random(plist_t tssreq, int is64bit, t_devicevals *devVals){
     }else{
         devVals->apnonce = (char*)malloc((devVals->parsedApnonceLen = nonceLen)+1);
         if (nonceLen == 20) {
-            //this is a pre iPhone7 device
+            //this is a pre iPhone 7 device
             //nonce is derived from generator with SHA1
             unsigned char zz[9] = {0};
             
@@ -726,8 +719,6 @@ int tss_populate_random(plist_t tssreq, int is64bit, t_devicevals *devVals){
     return rt;
 }
 
-
-
 int tssrequest(plist_t *tssreqret, char *buildManifest, t_devicevals *devVals, t_basebandMode basebandMode){
 #define reterror(a...) {error(a); error = -1; goto error;}
     int error = 0;
@@ -784,12 +775,12 @@ getID0:
             plist_dict_set_item(tssreq, "@ApImg4Ticket", plist_new_bool(0));
         if (plist_dict_get_item(tssreq, "@APTicket"))
             plist_dict_set_item(tssreq, "@APTicket", plist_new_bool(0));
-        //TODO don't use .shsh2 ending and don't save generator when saving only baseband
+        //TO-DO don't use .shsh2 ending and don't save generator when saving only baseband
         info("[TSSR] User specified to request only a Baseband ticket.\n");
     }
 
     if (basebandMode != kBasebandModeWithoutBaseband) {
-        //TODO: verify that this being int64_t instead of uint64_t doesn't actually break something
+        //TO-DO: verify that this being int64_t instead of uint64_t doesn't actually break something
 
         t_bbdevice bbinfo = getBBDeviceInfo(devVals->deviceModel);
         int64_t BbGoldCertId = devVals->bbgcid ? devVals->bbgcid : bbinfo->bbgcid;
@@ -961,7 +952,7 @@ int isManifestSignedForDevice(const char *buildManifestPath, t_devicevals *devVa
     char *bufManifest = NULL;
     
     info("[TSSC] opening %s\n",buildManifestPath);
-    //filehandling
+    //file handling
     FILE *fmanifest = fopen(buildManifestPath, "r");
     if (!fmanifest) reterror("[TSSC] ERROR: file %s not found!\n",buildManifestPath);
     fseek(fmanifest, 0, SEEK_END);
@@ -1048,8 +1039,6 @@ int isVersionSignedForDevice(jssytok_t *firmwareTokens, t_iosVersion *versVals, 
     }
     free(urls),urls = NULL;
     
-    
-    
 error:
     nocache = nocacheorig;
     if (buildManifest) free(buildManifest);
@@ -1057,8 +1046,7 @@ error:
 #undef reterror
 }
 
-#pragma mark print functions
-
+/* print functions */
 char *getFirmwareUrl(const char *deviceModel, t_iosVersion *versVals, jssytok_t *tokens){
     warning("FUNCTION IS DEPRECATED, USE getFirmwareUrls INSTEAD!\n");
     t_versionURL *versions, *v;
@@ -1080,7 +1068,7 @@ char *getFirmwareUrl(const char *deviceModel, t_iosVersion *versVals, jssytok_t 
     return ret;
 }
 
-#warning "print devices function doesn't actually check if devices are sorted. it assues they are sorted in json"
+/* Print devices function doesn't actually check if devices are sorted. it assues they are sorted in json */
 int printListOfDevices(jssytok_t *tokens){
 #define MAX_PER_LINE 10
     log("[JSON] printing device list\n");
@@ -1192,7 +1180,6 @@ int printListOfiOSForDevice(jssytok_t *tokens, char *device, int isOTA){
             if (res == 0) continue;
         }
         
-        
         nextVer = atoi(versions[i]);
         if (currVer && currVer != nextVer) printf("\n"), rspn = 0;
         currVer = nextVer;
@@ -1210,9 +1197,7 @@ int printListOfiOSForDevice(jssytok_t *tokens, char *device, int isOTA){
 #undef MAX_PER_LINE
 }
 
-
-#pragma mark check functions
-
+/* check functions */
 jssytok_t *getFirmwaresForDevice(const char *device, jssytok_t *tokens, int isOta){
     jssytok_t *ctok = (isOta) ? tokens : jssy_dictGetValueForKey(tokens, "devices");
     
