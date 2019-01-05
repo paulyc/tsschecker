@@ -786,8 +786,7 @@ getID0:
         int64_t BbGoldCertId = devVals->bbgcid ? devVals->bbgcid : bbinfo->bbgcid;
         size_t bbsnumSize = devVals->bbsnumSize ? devVals->bbsnumSize : bbinfo->bbsnumSize;
         if (BbGoldCertId != bbinfo->bbgcid || bbsnumSize != bbinfo->bbsnumSize) {
-            info("\n[TSSR] Found undocumented baseband. Please file an issue at " PACKAGE_BUGREPORT
-                 " with the following information:\n\t%s {\"%s\", " PRIi64 ", " PRIu64 "}\n\n",
+            info("\n[TSSR] Found undocumented baseband\n\n"),
                  devVals->deviceBoard, devVals->deviceModel, BbGoldCertId, bbsnumSize);
         }
 
@@ -830,7 +829,6 @@ int isManifestBufSignedForDevice(char *buildManifestBuffer, t_devicevals *devVal
 
     isSigned = ((apticket = tss_request_send(tssreq, NULL)) > 0);
 
-    
     if (print_tss_response) debug_plist(apticket);
     if (isSigned && save_shshblobs){
         if (!devVals->installType){
