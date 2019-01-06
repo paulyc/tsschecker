@@ -321,7 +321,6 @@ plist_t getBuildidentityWithBoardconfig(plist_t buildManifest, const char *board
             rt = NULL;
         else
             break;
-        
     }
     
 error:
@@ -373,7 +372,6 @@ malloc_rets:
         memset(rets = (t_versionURL*)malloc(sizeof(t_versionURL)*(retcounter+1)), 0, sizeof(t_versionURL)*(retcounter+1));
     rets_base = rets;
     
-
     jssytok_t *tmp = firmwares->subval;
     for (size_t i=0; i<firmwares->size; tmp=tmp->next, i++) {
         jssytok_t *ios = jssy_dictGetValueForKey(tmp, (versVals->buildID) ? "buildid" : "version");
@@ -396,7 +394,6 @@ malloc_rets:
                 memcpy(versVals->version, i_vers->value, i_vers->size);
                 versVals->version[i_vers->size] = '\0';
             }
-            
             
             if (!rets) retcounter++;
             else{
@@ -425,10 +422,8 @@ malloc_rets:
         }
     }
     
-    
     if (!retcounter) return NULL;
     else if (!rets) goto malloc_rets;
-    
     
     return (t_versionURL*)rets_base;
 }
@@ -495,7 +490,6 @@ char *getBuildManifest(char *url, const char *device, const char *version, const
         info("[TSSC] using cached Buildmanifest for %s\n",name);
     }else info("[TSSC] opening Buildmanifest for %s\n",name);
     
-    
     if (!f || nocache){
         //download if it isn't there
         if (downloadPartialzip(url, (isOta) ? "AssetData/boot/BuildManifest.plist" : "BuildManifest.plist", fileDir)){
@@ -519,7 +513,6 @@ char *getBuildManifest(char *url, const char *device, const char *version, const
 }
 
 t_bbdevice getBBDeviceInfo(const char *deviceModel){
-    
     t_bbdevice bbdevs = bbdevices_get_all();
     
     while (bbdevs->deviceModel && strcasecmp(bbdevs->deviceModel, deviceModel) != 0)
@@ -644,7 +637,6 @@ int tss_populate_random(plist_t tssreq, int is64bit, t_devicevals *devVals){
         strncasecmp(devVals->deviceModel, "iPad4,", strlen("iPad4,")) == 0 ||
         strncasecmp(devVals->deviceModel, "iPad5,", strlen("iPad5,")) == 0 ||
         strncasecmp(devVals->deviceModel, "iPad6,", strlen("iPad6,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPhone1,", strlen("iPhone1,")) == 0 ||
         strncasecmp(devVals->deviceModel, "iPhone2,", strlen("iPhone2,")) == 0 ||
         strncasecmp(devVals->deviceModel, "iPhone3,", strlen("iPhone3,")) == 0 ||
         strncasecmp(devVals->deviceModel, "iPhone4,", strlen("iPhone4,")) == 0 ||
@@ -652,8 +644,6 @@ int tss_populate_random(plist_t tssreq, int is64bit, t_devicevals *devVals){
         strncasecmp(devVals->deviceModel, "iPhone6,", strlen("iPhone6,")) == 0 ||
         strncasecmp(devVals->deviceModel, "iPhone7,", strlen("iPhone7,")) == 0 ||
         strncasecmp(devVals->deviceModel, "iPhone8,", strlen("iPhone8,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPod1,", strlen("iPod1,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPod2,", strlen("iPod2,")) == 0 ||
         strncasecmp(devVals->deviceModel, "iPod3,", strlen("iPod3,")) == 0 ||
         strncasecmp(devVals->deviceModel, "iPod4,", strlen("iPod4,")) == 0 ||
         strncasecmp(devVals->deviceModel, "iPod5,", strlen("iPod5,")) == 0 ||
@@ -728,7 +718,7 @@ int tss_populate_random(plist_t tssreq, int is64bit, t_devicevals *devVals){
     devVals->sepnonce[NONCELEN_SEP] = '\0';
     
     debug("[TSSR] ecid=%llu\n",devVals->ecid);
-    debug("[TSSR] nonce=%s\n",devVals->apnonce);
+    debug("[TSSR] apnonce=%s\n",devVals->apnonce);
     debug("[TSSR] sepnonce=%s\n",devVals->sepnonce);
     
     int rt = tss_populate_devicevals(tssreq, devVals->ecid, devVals->apnonce, devVals->parsedApnonceLen, devVals->sepnonce, devVals->parsedSepnonceLen, is64bit);
@@ -890,7 +880,6 @@ int isManifestBufSignedForDevice(char *buildManifestBuffer, t_devicevals *devVal
         plist_get_uint_val(pecid, &devVals->ecid);
         char *cecid = ecid_to_string(devVals->ecid);
         
-        
         uint32_t size = 0;
         char* data = NULL;
         if (*devVals->generator)
@@ -900,7 +889,6 @@ int isManifestBufSignedForDevice(char *buildManifestBuffer, t_devicevals *devVal
         if (apticket3)
             plist_dict_set_item(apticket, "noNonce", apticket3);
         plist_to_xml(apticket, &data, &size);
-        
         
         char *apnonce = "";
         size_t apnonceLen = 0;
@@ -930,7 +918,6 @@ int isManifestBufSignedForDevice(char *buildManifestBuffer, t_devicevals *devVal
         strncpy(fname, shshSavePath, prePathLen);
         
         snprintf(fname+prePathLen, fnamelen, DIRECTORY_DELIMITER_STR"%s_%s_%s-%s_%s.shsh%s",cecid,tmpDevicename,cpvers,cbuild, apnonce, (*devVals->generator || apticket2) ? "2" : "");
-        
         
         FILE *shshfile = fopen(fname, "w");
         if (!shshfile) error("[Error] can't save shsh at %s\n",fname);
@@ -1177,10 +1164,8 @@ char **getListOfiOSForDevice(jssytok_t *tokens, const char *device, int isOTA, i
     return versions;
 }
 
-
 int printListOfiOSForDevice(jssytok_t *tokens, char *device, int isOTA){
 #define MAX_PER_LINE 10
-    
     int versionsCnt;
     char **versions = getListOfiOSForDevice(tokens, device, isOTA, &versionsCnt);
     
@@ -1224,7 +1209,6 @@ jssytok_t *getFirmwaresForDevice(const char *device, jssytok_t *tokens, int isOt
 }
 
 int checkFirmwareForDeviceExists(t_devicevals *devVals, t_iosVersion *versVals, jssytok_t *tokens){
-    
     jssytok_t *firmwares = getFirmwaresForDevice(devVals->deviceModel, tokens, versVals->isOta);
     if (!firmwares)
         return 0;
