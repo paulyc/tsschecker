@@ -91,7 +91,7 @@ void cmd_help(){
     printf("      --raw\t\t\tsend raw file to Apple's TSS server (useful for debugging)\n");
     printf("\n");
     printf("Homepage: <https://github.com/s0uthwest/tsschecker>\n");
-    printf("Original project: <https://github.com/tsschecker/tsschecker>\n");
+    printf("Original project: <https://github.com/tihmstar/tsschecker>\n");
 }
 
 int64_t parseECID(const char *ecid){
@@ -304,11 +304,9 @@ int main(int argc, const char * argv[]) {
         return 0;
     }
 
-    
     if (devVals.deviceBoard)
         for (int i=0; i<strlen(devVals.deviceBoard); i++)
             devVals.deviceBoard[i] = tolower(devVals.deviceBoard[i]);
-    
     
     if (!devVals.deviceModel){
         if (devVals.deviceBoard){
@@ -337,6 +335,7 @@ int main(int argc, const char * argv[]) {
             info("[TSSC] manually specified ecid to use, parsed \"%s\" to dec:%lld hex:%llx\n",ecid,devVals.ecid,devVals.ecid);
         }
     }
+    
     if (apnonce) {
         if ((devVals.apnonce = parseNonce(apnonce,&devVals.parsedApnonceLen)) ){
             info("[TSSC] manually specified apnonce to use, parsed \"%s\" to hex:",apnonce);
@@ -347,6 +346,7 @@ int main(int argc, const char * argv[]) {
             reterror(-7, "[TSSC] manually specified apnonce=%s, but parsing failed\n",apnonce);
         }
     }
+    
     if (sepnonce) {
         if ((devVals.sepnonce = parseNonce(sepnonce,&devVals.parsedSepnonceLen)) ){
             info("[TSSC] manually specified sepnonce to use, parsed \"%s\" to hex:",sepnonce);
@@ -397,8 +397,6 @@ int main(int argc, const char * argv[]) {
         }
     }
 
-    
-    
     if (flags & FLAG_LATEST_IOS && !versVals.version){
         int versionCnt = 0;
         int i = 0;
