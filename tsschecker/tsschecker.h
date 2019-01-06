@@ -6,8 +6,8 @@
 //  Copyright © 2016 tihmstar. All rights reserved.
 //
 
-#ifndef tsscheker_h
-#define tsscheker_h
+#ifndef tsschecker_h
+#define tsschecker_h
 
 #ifdef __cplusplus
 extern "C" {
@@ -110,7 +110,6 @@ const char *getBoardconfigFromModel(const char *model);
 const char *getModelFromBoardconfig(const char *boardconfig);
 plist_t getBuildidentity(plist_t buildManifest, const char *model, int isUpdateInstall);
 plist_t getBuildidentityWithBoardconfig(plist_t buildManifest, const char *boardconfig, int isUpdateInstall);
-
 
 #ifdef __cplusplus
 }
