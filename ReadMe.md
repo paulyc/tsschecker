@@ -9,6 +9,7 @@ https://github.com/s0uthwest/tsschecker/releases
 * Allows you to get lists of all devices and all iOS/OTA versions for a specific device.
 * Can check signing status for default iOS versions and beta ipsws (by specifying a `BuildManifest.plist`)
 * Works without specifying any device relevant values to check signing status, but can be used to save blobs when given an ECID and the option `--print-tss-response` (although there are better tools to do this).
+* If you want to save blobs with recommended ApNonce, please, see [this file](https://github.com/s0uthwest/tsschecker/blob/master/nonces.txt).
 
 tsschecker is not only meant to be used to check signing status, but also to explore Apple's tss servers.
 By using all of its customization possibilities, you might discover a combination of devices and iOS versions that is now getting signed but wasn't getting signed before.  
