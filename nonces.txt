@@ -16,3 +16,6 @@ DFU collision APNonces (not for all devices/firmwares, some collisioned):
 778282f0cf6e5234446d88ebc5dcfde81f415b57 
 7ce1657233867e988e1b48988ef98fc28ddf20f5
 198365e19ea223bd73ee27faa555ca24ac6ed65d
+994bf71da4fd4ba758a8ec6c943a5a610be02edb
+8f760412c8653de657e8ea2352f706de2e9ca85c
+63e81aabb8e9e45cc756c347e8cdfd9ae7c796ad
