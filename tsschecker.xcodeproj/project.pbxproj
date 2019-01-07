@@ -12,6 +12,8 @@
 		56520C1521B2693F005BD3F7 /* jssy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56520C0D21B2693E005BD3F7 /* jssy.cpp */; };
 		56520C1721B2693F005BD3F7 /* cmain.c in Sources */ = {isa = PBXBuildFile; fileRef = 56520C1021B2693F005BD3F7 /* cmain.c */; };
 		56931F5C21D900D200A88574 /* all.h in Sources */ = {isa = PBXBuildFile; fileRef = 563DA62E21BBC58900844624 /* all.h */; };
+		56DA633E21E3412400821A21 /* ptr_smart.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 56520C1221B2693F005BD3F7 /* ptr_smart.hpp */; };
+		56DA633F21E3412900821A21 /* helper.h in Sources */ = {isa = PBXBuildFile; fileRef = 56520C1321B2693F005BD3F7 /* helper.h */; };
 		56EF4C0121B1A2D10056D405 /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EF4C0021B1A2D10056D405 /* libcurl.tbd */; };
 		56EF4C0321B1A2E10056D405 /* libirecovery.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EF4C0221B1A2E10056D405 /* libirecovery.2.dylib */; };
 		56EF4C0521B1A2F40056D405 /* libfragmentzip.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 56EF4C0421B1A2F40056D405 /* libfragmentzip.0.dylib */; };
@@ -188,8 +190,6 @@
 			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
-			knownRegions = (
-			);
 			mainGroup = 87EB90961C2940CD002CEE70;
 			productRefGroup = 87EB90A01C2940CD002CEE70 /* Products */;
 			projectDirPath = "";
@@ -228,12 +228,14 @@
 			files = (
 				56520C1721B2693F005BD3F7 /* cmain.c in Sources */,
 				56520C1421B2693F005BD3F7 /* jssy.c in Sources */,
+				56DA633F21E3412900821A21 /* helper.h in Sources */,
 				87F927AC1C3E44CE00343510 /* tsschecker.c in Sources */,
 				56520C1521B2693F005BD3F7 /* jssy.cpp in Sources */,
 				87CEC4C91C576BD9006E75FC /* tss.c in Sources */,
 				87F927AF1C3E455200343510 /* download.c in Sources */,
 				87EB90A31C2940CD002CEE70 /* main.c in Sources */,
 				56931F5C21D900D200A88574 /* all.h in Sources */,
+				56DA633E21E3412400821A21 /* ptr_smart.hpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
