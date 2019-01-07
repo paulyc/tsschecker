@@ -968,7 +968,37 @@ int tss_request_add_savage_tags(plist_t request, plist_t parameters, plist_t ove
 	uint8_t isprod = 0;
 	plist_get_bool_val(node, &isprod);
 	node = NULL;
+    
+    /* add Savage,B0-*-Patch */
+    if (isprod) {
+        comp_name = "Savage,B0-Prod-Patch";
+    } else {
+        comp_name = "Savage,B0-Dev-Patch";
+    }
+    node = plist_access_path(manifest_node, 2, comp_name, "Digest");
+    if (!node) {
+        tsserror("ERROR: Unable to get %s digest from manifest\n", comp_name);
+        return -1;
+    }
+    dict = plist_new_dict();
+    plist_dict_set_item(dict, "Digest", plist_copy(node));
+    plist_dict_set_item(request, comp_name, dict);
 
+    /* add Savage,B0-*-Patch */
+    if (isprod) {
+        comp_name = "Savage,B0-Prod-PatchVT";
+    } else {
+        comp_name = "Savage,B0-Dev-PatchVT";
+    }
+    node = plist_access_path(manifest_node, 2, comp_name, "Digest");
+    if (!node) {
+        tsserror("ERROR: Unable to get %s digest from manifest\n", comp_name);
+        return -1;
+    }
+    dict = plist_new_dict();
+    plist_dict_set_item(dict, "Digest", plist_copy(node));
+    plist_dict_set_item(request, comp_name, dict);
+    
 	/* add Savage,B2-*-Patch */
 	if (isprod) {
 		comp_name = "Savage,B2-Prod-Patch";
@@ -983,8 +1013,53 @@ int tss_request_add_savage_tags(plist_t request, plist_t parameters, plist_t ove
 	dict = plist_new_dict();
 	plist_dict_set_item(dict, "Digest", plist_copy(node));
 	plist_dict_set_item(request, comp_name, dict);
+    
+    /* add Savage,B2-*-PatchVT */
+    if (isprod) {
+        comp_name = "Savage,B2-Prod-PatchVT";
+    } else {
+        comp_name = "Savage,B2-Dev-PatchVT";
+    }
+    node = plist_access_path(manifest_node, 2, comp_name, "Digest");
+    if (!node) {
+        tsserror("ERROR: Unable to get %s digest from manifest\n", comp_name);
+        return -1;
+    }
+    dict = plist_new_dict();
+    plist_dict_set_item(dict, "Digest", plist_copy(node));
+    plist_dict_set_item(request, comp_name, dict);
+    
+    /* add Savage,BA-*-Patch */
+    if (isprod) {
+        comp_name = "Savage,BA-Prod-Patch";
+    } else {
+        comp_name = "Savage,BA-Dev-Patch";
+    }
+    node = plist_access_path(manifest_node, 2, comp_name, "Digest");
+    if (!node) {
+        tsserror("ERROR: Unable to get %s digest from manifest\n", comp_name);
+        return -1;
+    }
+    dict = plist_new_dict();
+    plist_dict_set_item(dict, "Digest", plist_copy(node));
+    plist_dict_set_item(request, comp_name, dict);
 
-	/* add Savage,Nonce */
+    /* add Savage,BA-*-PatchVT */
+    if (isprod) {
+        comp_name = "Savage,BA-Prod-PatchVT";
+    } else {
+        comp_name = "Savage,BA-Dev-PatchVT";
+    }
+    node = plist_access_path(manifest_node, 2, comp_name, "Digest");
+    if (!node) {
+        tsserror("ERROR: Unable to get %s digest from manifest\n", comp_name);
+        return -1;
+    }
+    dict = plist_new_dict();
+    plist_dict_set_item(dict, "Digest", plist_copy(node));
+    plist_dict_set_item(request, comp_name, dict);
+    
+    /* add Savage,Nonce */
 	node = plist_dict_get_item(parameters, "Savage,Nonce");
 	if (!node) {
 		tsserror("ERROR: Unable to find required Savage,Nonce in parameters\n");
