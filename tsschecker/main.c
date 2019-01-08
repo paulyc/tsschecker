@@ -21,6 +21,7 @@
 #include "download.h"
 #include "tsschecker.h"
 #include "all.h"
+#include "debug.h"
 
 #define FLAG_LIST_IOS       1 << 0
 #define FLAG_LIST_DEVICES   1 << 1

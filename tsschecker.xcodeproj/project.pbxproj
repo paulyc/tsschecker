@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		56163B0A21E4FCB00069A0B0 /* debug.h in Sources */ = {isa = PBXBuildFile; fileRef = 56163B0921E4FB980069A0B0 /* debug.h */; };
 		563DA63021BBC5AA00844624 /* libcrypto.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 563DA62F21BBC5AA00844624 /* libcrypto.3.dylib */; };
 		56520C1421B2693F005BD3F7 /* jssy.c in Sources */ = {isa = PBXBuildFile; fileRef = 56520C0C21B2693E005BD3F7 /* jssy.c */; };
 		56520C1521B2693F005BD3F7 /* jssy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56520C0D21B2693E005BD3F7 /* jssy.cpp */; };
@@ -37,6 +38,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		56163B0921E4FB980069A0B0 /* debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debug.h; sourceTree = "<group>"; };
 		563DA62E21BBC58900844624 /* all.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = all.h; sourceTree = "<group>"; };
 		563DA62F21BBC5AA00844624 /* libcrypto.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.3.dylib; path = ../../../../../usr/local/lib/libcrypto.3.dylib; sourceTree = "<group>"; };
 		56520C0C21B2693E005BD3F7 /* jssy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jssy.c; path = external/jssy/jssy/jssy.c; sourceTree = SOURCE_ROOT; };
@@ -140,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				563DA62E21BBC58900844624 /* all.h */,
+				56163B0921E4FB980069A0B0 /* debug.h */,
 				87B93E821EE7098900709583 /* external */,
 				87CEC4CB1C576BE8006E75FC /* libs */,
 				87F927AE1C3E455200343510 /* download.h */,
@@ -190,6 +193,8 @@
 			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
+			knownRegions = (
+			);
 			mainGroup = 87EB90961C2940CD002CEE70;
 			productRefGroup = 87EB90A01C2940CD002CEE70 /* Products */;
 			projectDirPath = "";
@@ -234,6 +239,7 @@
 				87CEC4C91C576BD9006E75FC /* tss.c in Sources */,
 				87F927AF1C3E455200343510 /* download.c in Sources */,
 				87EB90A31C2940CD002CEE70 /* main.c in Sources */,
+				56163B0A21E4FCB00069A0B0 /* debug.h in Sources */,
 				56931F5C21D900D200A88574 /* all.h in Sources */,
 				56DA633E21E3412400821A21 /* ptr_smart.hpp in Sources */,
 			);

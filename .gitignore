@@ -6,8 +6,8 @@ Makefile
 Makefile.in
 aclocal.m4
 autom4te.cache
-depcomp
 compile
+depcomp
 config.h
 config.h.in
 config.log
@@ -15,7 +15,6 @@ config.status
 config.guess
 config.sub
 configure
-devices.txt
 external/.DS_Store
 install-sh
 libtool
