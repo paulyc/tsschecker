@@ -17,7 +17,7 @@ extern "C" {
 #include "jssy.h"
 #include <plist/plist.h>
 #include "tss.h"
-#include "all.h"
+#include "debug.h"
     
 extern int dbglog;
 extern int print_tss_response;
