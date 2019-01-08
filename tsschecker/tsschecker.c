@@ -144,6 +144,7 @@ static struct bbdevice bbdevices[] = {
     {"iPhone10,4", 524245983, 12}, // iPhone 8 (GSM)
     {"iPhone10,5", 524245983, 12}, // iPhone 8 Plus (GSM)
     {"iPhone10,6", 524245983, 12}, // iPhone X GSM
+    {"iPhone11,6", 165673526, 12}, // iPhone XS Max
 
     // iPads
     {"iPad1,1", 0, 0}, // iPad (1st gen)
@@ -243,8 +244,8 @@ char *getOtaJson(){
 const char *getBoardconfigFromModel(const char *model){
     const char *rt = NULL;
     irecv_device_t table = irecv_devices_get_all();
-    //iterate through table until find correct entry
-    //table is terminated with {NULL, NULL, -1, -1} entry, return that if device not found
+    /* iterate through table until find correct entry
+       table is terminated with {NULL, NULL, -1, -1} entry, return that if device not found */
     while (table->product_type){
         if (strcasecmp(model, table->product_type) == 0){
             if (rt){
@@ -263,8 +264,8 @@ const char *getBoardconfigFromModel(const char *model){
 const char *getModelFromBoardconfig(const char *boardconfig){
     const char *rt = NULL;
     irecv_device_t table = irecv_devices_get_all();
-    //iterate through table until find correct entry
-    //table is terminated with {NULL, NULL, -1, -1} entry, return that if device not found
+    /* iterate through table until find correct entry
+       table is terminated with {NULL, NULL, -1, -1} entry, return that if device not found */
     while (table->product_type){
         if (strcasecmp(boardconfig, table->hardware_model) == 0){
             if (rt){
@@ -303,11 +304,9 @@ plist_t getBuildidentityWithBoardconfig(plist_t buildManifest, const char *board
         }
         char *string = NULL;
         plist_get_string_val(RestoreBehavior, &string);
-        //assuming there are only Erase and Update. If it's not Erase it must be Update
-        //also converting isUpdateInstall to bool (1 or 0)
+        //assuming there are only Erase and Update. If it's not Erase it must be Update also converting isUpdateInstall to bool (1 or 0)
         if ((strncmp(string, "Erase", strlen(string)) != 0) == !isUpdateInstall){
-            //continue when Erase found but isUpdateInstall is true
-            //or Update found and isUpdateInstall is false
+            //continue when Erase found but isUpdateInstall is true or Update found and isUpdateInstall is false
             rt = NULL;
             continue;
         }
@@ -575,7 +574,6 @@ int tss_populate_basebandvals(plist_t tssreq, plist_t tssparameters, int64_t BbG
     int n=0; for (int i=1; i<7; i++) BbChipID += (rand() % 10) * pow(10, ++n);
 
     /* BasebandNonce not required */
-//  plist_dict_set_item(parameters, "BbNonce", plist_new_data(bbnonce, NONCELEN_BASEBAND));
     plist_dict_set_item(parameters, "BbGoldCertId", plist_new_uint(BbGoldCertId));
     plist_dict_set_item(parameters, "BbSNUM", plist_new_data((char *)BbSNUM, bbsnumSize));
 
