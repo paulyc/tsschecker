@@ -196,12 +196,6 @@ static struct bbdevice bbdevices[] = {
     {"iPad8,7", 165673526, 12}, // iPad Pro 12,9", 3rd gen, Cellular)
     {"iPad8,8", 165673526, 12}, // iPad Pro 12,9", 3rd gen, 1 TB model, Cellular)
     
-    // Apple Watches
-    {"Watch3,3", 0, 0}, // Apple Watch Series 3 (38mm)
-    {"Watch3,4", 0, 0}, // Apple Watch Series 3 (42mm)
-    {"Watch4,1", 0, 0}, // Apple Watch Series 4 (40mm)
-    {"Watch4,2", 0, 0}, // Apple Watch Series 4 (44mm)
-    
     // Apple TVs
     {"AppleTV1,1", 0, 0}, // 1st gen
     {"AppleTV2,1", 0, 0}, // 2nd gen
