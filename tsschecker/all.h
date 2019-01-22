@@ -11,8 +11,8 @@
 
 // version bump
 #ifdef DEBUG // this is for developing with Xcode
-#define TSSCHECKER_VERSION_COMMIT_COUNT "Debug"
-#define TSSCHECKER_VERSION_COMMIT_SHA "Build: " __DATE__ " " __TIME__
+#define TSSCHECKER_VERSION_COUNT "Debug"
+#define TSSCHECKER_VERSION_SHA "Build: " __DATE__ " " __TIME__
 #else
 #endif
 

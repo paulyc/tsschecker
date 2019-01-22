@@ -13,8 +13,8 @@ AC_PROG_LIBTOOL
 AC_CONFIG_MACRO_DIRS([m4])
 
 # Version bump
-CFLAGS+=" -D TSSCHECKER_VERSION_COMMIT_COUNT=\\\"$(git rev-list --count HEAD | tr -d '\n')\\\""
-CFLAGS+=" -D TSSCHECKER_VERSION_COMMIT_SHA=\\\"$(git rev-parse HEAD | tr -d '\n')\\\""
+CFLAGS+=" -D TSSCHECKER_VERSION_COUNT=\\\"$(git rev-list --count HEAD | tr -d '\n')\\\""
+CFLAGS+=" -D TSSCHECKER_VERSION_SHA=\\\"$(git rev-parse HEAD | tr -d '\n')\\\""
 
 # Checks for libraries.
 AC_CANONICAL_HOST

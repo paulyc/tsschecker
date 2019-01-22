@@ -44,19 +44,19 @@ static struct option longopts[] = {
     { "update-install",     optional_argument, NULL, 'u' },
     { "boardconfig",        required_argument, NULL, 'B' },
     { "buildid",            required_argument, NULL, 'Z' },
-    { "debug",              no_argument,       NULL, 0 },
-    { "list-devices",       no_argument,       NULL, 1 },
-    { "list-ios",           no_argument,       NULL, 2 },
-    { "save-path",          required_argument, NULL, 3 },
-    { "print-tss-request",  no_argument,       NULL, 4 },
-    { "print-tss-response", no_argument,       NULL, 5 },
-    { "beta",               no_argument,       NULL, 6 },
-    { "nocache",            no_argument,       NULL, 7 },
-    { "apnonce",            required_argument, NULL, 8 },
-    { "sepnonce",           required_argument, NULL, 9 },
-    { "raw",                required_argument, NULL, 10 },
+    { "debug",              no_argument,       NULL,  0  },
+    { "list-devices",       no_argument,       NULL,  1  },
+    { "list-ios",           no_argument,       NULL,  2  },
+    { "save-path",          required_argument, NULL,  3  },
+    { "print-tss-request",  no_argument,       NULL,  4  },
+    { "print-tss-response", no_argument,       NULL,  5  },
+    { "beta",               no_argument,       NULL,  6  },
+    { "nocache",            no_argument,       NULL,  7  },
+    { "apnonce",            required_argument, NULL,  8  },
+    { "sepnonce",           required_argument, NULL,  9  },
+    { "raw",                required_argument, NULL,  10 },
     { "generator",          required_argument, NULL, 'g' },
-    { "bbsnum",             required_argument, NULL, 11 },
+    { "bbsnum",             required_argument, NULL,  11 },
     { NULL, 0, NULL, 0 }
 };
 
@@ -64,15 +64,15 @@ void cmd_help(){
     printf("Usage: tsschecker [OPTIONS]\n");
     printf("Works with signing technology on iOS devices\n\n");
     printf("  -d, --device MODEL\t\tspecific device by its MODEL (eg. iPhone11,8)\n");
-    printf("  -i, --ios VERSION\t\tspecific iOS version (eg. 12.1.2)\n");
-    printf("      --buildid BUILDID\t\tspecific buildid instead of iOS version (eg. 16C104)\n");
+    printf("  -i, --ios VERSION\t\tspecific iOS version (eg. 12.1.3)\n");
+    printf("      --buildid BUILDID\t\tspecific buildid instead of iOS version (eg. 16D40)\n");
     printf("  -B, --boardconfig BOARD\tspecific boardconfig instead of iPhone model (eg. n841ap)\n");
     printf("  -h, --help\t\t\tprints usage information\n");
     printf("  -o, --ota\t\t\tcheck OTA signing status, instead of normal restore\n");
     printf("  -b, --no-baseband\t\tdon't check baseband signing status. Request a ticket without baseband\n");
     printf("  -m, --build-manifest\t\tmanually specify BuildManifest (can be used with -d)\n");
-    printf("  -s, --save\t\t\tsave fetched signing blobs (mostly makes sense with -e)\n");
-    printf("  -u, --update-install\t\t\trequest update blob instead of erase\n");
+    printf("  -s, --save\t\t\tsave fetched signing tickets (mostly makes sense with -e)\n");
+    printf("  -u, --update-install\t\t\request update ticket instead of erase\n");
     printf("  -l, --latest\t\t\tuse latest public iOS version instead of manually specifying one\n");
     printf("                 \t\tespecially useful with -s and -e for saving blobs\n");
     printf("  -e, --ecid ECID\t\tmanually specify ECID to be used for fetching blobs, instead of using random ones\n");
@@ -83,14 +83,13 @@ void cmd_help(){
     printf("      --save-path PATH\t\tspecify path for saving blobs\n");
     printf("      --generator GEN\t\tmanually specify generator in format 0x%%16llx\n");
     printf("  -h, --help\t\t\tprints usage information\n");
-    printf("      --beta\t\t\trequest ticket for beta instead of normal release (use with -o)\n");
+    printf("      --beta\t\t\trequest signing tickets for beta instead of normal release (use with -o)\n");
     printf("      --list-devices\t\tlist all known devices\n");
     printf("      --list-ios\t\tlist all known iOS versions\n");
     printf("      --nocache \t\tignore caches and redownload required files\n");
     printf("      --print-tss-request\n");
     printf("      --print-tss-response\n");
-    printf("      --raw\t\t\tsend raw file to Apple's TSS server (useful for debugging)\n");
-    printf("\n");
+    printf("      --raw\t\t\tsend raw file to Apple's TSS server (useful for debugging)\n\n");
     printf("Homepage: <https://github.com/s0uthwest/tsschecker>\n");
     printf("Original project: <https://github.com/tihmstar/tsschecker>\n");
 }
@@ -151,7 +150,7 @@ char *parseNonce(const char *nonce, size_t *parsedLen){
 int main(int argc, const char * argv[]) {
     int err = 0;
     int isSigned = 0;
-    printf("Version: "TSSCHECKER_VERSION_COMMIT_SHA" - "TSSCHECKER_VERSION_COMMIT_COUNT"\n"); // versioning
+    printf("Version: "TSSCHECKER_VERSION_SHA" - "TSSCHECKER_VERSION_COUNT"\n"); // versioning
     
     dbglog = 1;
     idevicerestore_debug = 0;
@@ -289,7 +288,7 @@ int main(int argc, const char * argv[]) {
         size_t bufSize = 0;
         FILE *f = fopen(rawFilePath, "rb");
         if (!f)
-            reterror(-100, "[TSSC] failed to read rawfile at \"%s\"\n",rawFilePath);
+            reterror(-100, "[TSSC] failed to read raw file at \"%s\"\n",rawFilePath);
         fseek(f, 0, SEEK_END);
         bufSize = ftell(f);
         fseek(f, 0, SEEK_SET);
@@ -315,7 +314,7 @@ int main(int argc, const char * argv[]) {
             if ((tmp = (char*)getModelFromBoardconfig(devVals.deviceBoard)))
                 devVals.deviceModel = strdup(tmp);
             else
-                reterror(-25, "[TSSC] If you using --boardconfig please also specify devicemodel with -d\n");
+                reterror(-25, "[TSSC] If you using --boardconfig please also specify device model with -d\n");
         }
     }
     
@@ -331,31 +330,31 @@ int main(int argc, const char * argv[]) {
     
     if (ecid) {
         if ((devVals.ecid = parseECID(ecid)) == 0){
-            reterror(-7, "[TSSC] manually specified ecid=%s, but parsing failed\n",ecid);
+            reterror(-7, "[TSSC] manually specified ECID=%s, but parsing failed\n",ecid);
         }else{
-            info("[TSSC] manually specified ecid to use, parsed \"%s\" to dec:%lld hex:%llx\n",ecid,devVals.ecid,devVals.ecid);
+            info("[TSSC] manually specified ECID to use, parsed \"%s\" to dec:%lld hex:%llx\n",ecid,devVals.ecid,devVals.ecid);
         }
     }
     
     if (apnonce) {
         if ((devVals.apnonce = parseNonce(apnonce,&devVals.parsedApnonceLen)) ){
-            info("[TSSC] manually specified apnonce to use, parsed \"%s\" to hex:",apnonce);
+            info("[TSSC] manually specified ApNonce to use, parsed \"%s\" to hex:",apnonce);
             unsigned char *tmp = (unsigned char*)devVals.apnonce;
             for (int i=0; i< devVals.parsedApnonceLen; i++) info("%02x",*tmp++);
             info("\n");
         }else{
-            reterror(-7, "[TSSC] manually specified apnonce=%s, but parsing failed\n",apnonce);
+            reterror(-7, "[TSSC] manually specified ApNonce=%s, but parsing failed\n",apnonce);
         }
     }
     
     if (sepnonce) {
         if ((devVals.sepnonce = parseNonce(sepnonce,&devVals.parsedSepnonceLen)) ){
-            info("[TSSC] manually specified sepnonce to use, parsed \"%s\" to hex:",sepnonce);
+            info("[TSSC] manually specified SepNonce to use, parsed \"%s\" to hex:",sepnonce);
             unsigned char *tmp = (unsigned char*)devVals.sepnonce;
             for (int i=0; i< devVals.parsedSepnonceLen; i++) info("%02x",*tmp++);
             info("\n");
         }else{
-            reterror(-7, "[TSSC] manually specified sepnonce=%s, but parsing failed\n",sepnonce);
+            reterror(-7, "[TSSC] manually specified SepNonce=%s, but parsing failed\n",sepnonce);
         }
     }
     
