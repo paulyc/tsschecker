@@ -1,5 +1,5 @@
-AM_CFLAGS = $(libplist_CFLAGS) $(zlib_CFLAGS) $(libfragmentzip_CFLAGS) $(libcurl_CFLAGS) $(libcrypto_CFLAGS) $(libirecovery_CFLAGS) -I$(top_srcdir)/external/libfragmentzip/include -I$(top_srcdir)/external/jssy/jssy/
-AM_LDFLAGS = $(libplist_LIBS) $(libcurl_LIBS) $(libcrypto_LIBS) $(libirecovery_LIBS) $(zlib_LIBS) $(libfragmentzip_LIBS) -lm
+AM_CFLAGS = $(libplist_CFLAGS) $(libfragmentzip_CFLAGS) $(libcurl_CFLAGS) $(libcrypto_CFLAGS) $(libirecovery_CFLAGS) -I$(top_srcdir)/external/libfragmentzip/include -I$(top_srcdir)/external/jssy/jssy/
+AM_LDFLAGS = $(libplist_LIBS) $(libcurl_LIBS) $(libcrypto_LIBS) $(libirecovery_LIBS) $(libfragmentzip_LIBS) -lm
 
 noinst_LIBRARIES = libjssy.a
 libjssy_a_CFLAGS = $(AM_CFLAGS)
