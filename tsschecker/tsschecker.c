@@ -204,7 +204,6 @@ static struct bbdevice bbdevices[] = {
     {"AppleTV3,1", 0, 0}, // 3rd gen
     {"AppleTV3,2", 0, 0}, // 3rd gen (2013)
     {"AppleTV5,3", 0, 0}, // 4th gen
-    {"AppleTV6,2", 0, 0}, // 4K
     {NULL, 0, 0}
 };
 
