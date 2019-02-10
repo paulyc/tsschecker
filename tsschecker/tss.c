@@ -1261,6 +1261,9 @@ char* tss_request_send_raw(char* request, const char* server_url_string, int* re
         } else if (status_code == 126) {
             // An internal error occured, most likely the request was malformed
             break;
+        } else if (status_code == 128) {
+            // Error that occurs when saving blobs on certain A8(X) devices
+            break;
         } else {
             error("ERROR: tss_send_request: Unhandled status code %d\n", status_code);
         }
