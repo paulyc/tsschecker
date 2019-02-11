@@ -489,7 +489,7 @@ char *getBuildManifest(char *url, const char *device, const char *version, const
     
     if (buildID){
         strcat(fileDir, "_");
-        strcat(fileDir, buildID, strlen);
+        strcat(fileDir, buildID);
     }
     
     if (isOta) strcat(fileDir, "ota");

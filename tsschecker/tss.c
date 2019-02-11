@@ -1226,8 +1226,7 @@ char* tss_request_send_raw(char* request, const char* server_url_string, int* re
             status_code = 0;
             info("success\n");
             break;
-        }
-        else {
+        } else {
             info("failure\n");
         }
         
@@ -1324,7 +1323,6 @@ plist_t tss_request_send(plist_t tss_request, const char* server_url_string) {
 }
 
 static int tss_response_get_data_by_key(plist_t response, const char* name, unsigned char** buffer, unsigned int* length) {
-
 	plist_t node = plist_dict_get_item(response, name);
 	if (!node || plist_get_node_type(node) != PLIST_DATA) {
 		debug("DEBUG: %s: No entry '%s' in TSS response\n", __func__, name);
