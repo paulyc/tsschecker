@@ -65,8 +65,8 @@ void cmd_help(){
     printf("Usage: tsschecker [OPTIONS]\n");
     printf("Works with signing technology on iOS devices\n\n");
     printf("  -d, --device MODEL\t\tspecific device by its MODEL (eg. iPhone11,8)\n");
-    printf("  -i, --ios VERSION\t\tspecific iOS version (eg. 12.1.3)\n");
-    printf("      --buildid BUILDID\t\tspecific buildid instead of iOS version (eg. 16D40)\n");
+    printf("  -i, --ios VERSION\t\tspecific iOS version (eg. 12.2)\n");
+    printf("      --buildid BUILDID\t\tspecific buildid instead of iOS version (eg. 16E227)\n");
     printf("  -B, --boardconfig BOARD\tspecific boardconfig instead of iPhone model (eg. n841ap)\n");
     printf("  -h, --help\t\t\tprints usage information\n");
     printf("  -o, --ota\t\t\tcheck OTA signing status, instead of normal restore\n");
@@ -79,7 +79,7 @@ void cmd_help(){
     printf("  -e, --ecid ECID\t\tmanually specify ECID to be used for fetching blobs, instead of using random ones\n");
     printf("                 \t\tECID must be either dec or hex eg. 5482657301265 or ab46efcbf71\n");
     printf("      --apnonce NONCE\t\tmanually specify ApNonce instead of using random one (not required for saving blobs)\n");
-    printf("      --sepnonce NONCE\t\tmanually specify sepNonce instead of using random one (not required for saving blobs)\n");
+    printf("      --sepnonce NONCE\t\tmanually specify SepNonce instead of using random one (not required for saving blobs)\n");
     printf("      --bbsnum SNUM\t\tmanually specify BbSNUM, in hex, for saving valid BBTicket\n");
     printf("      --save-path PATH\t\tspecify path for saving blobs\n");
     printf("      --generator GEN\t\tmanually specify generator in format 0x%%16llx\n");

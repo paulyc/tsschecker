@@ -9,6 +9,7 @@
 #ifndef debug_h
 #define debug_h
 
+// idevicerestore flags
 extern int idevicerestore_debug;
 #define info(a ...) printf(a)
 #define log(a ...) if (dbglog) printf(a)
