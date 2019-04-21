@@ -1,11 +1,11 @@
 # tsschecker  
-_tsschecker is a powerful tool to work with signing technology on iOS devices._
+_tsschecker is a powerful tool to work with signing technology on iOS/tvOS/watchOS devices._
 
-Latest compiled version can be found [here](https://github.com/s0uthwest/tsschecker/releases). Windows & Linux version are supported, but I will not compile it.
+Latest compiled version can be found [here](https://github.com/s0uthwest/tsschecker/releases). Windows & Linux version are supported, but I won't compile it.
 
 ## Features  
-* Allows you to get lists of all devices and all iOS/OTA versions for a specific device.
-* Can check signing status for default iOS versions and beta iPSW's (by specifying a `BuildManifest.plist`)
+* Allows you to get lists of all devices and all iOS/tvOS/WatchOS OTA versions for a specific device.
+* Can check signing status for default iOS/tvOS/watchOS versions and beta iPSW's (by specifying a `BuildManifest.plist`)
 * Works without specifying any device relevant values to check signing status, but can be used to save blobs when given an ECID and the option `--print-tss-response` (although there are better tools to do this).
 * __If you want to save blobs with recommended ApNonce, please, see [this file](https://github.com/s0uthwest/tsschecker/blob/master/nonces.txt).__
 
@@ -42,4 +42,4 @@ Creator of [original project](https://github.com/tihmstar/tsschecker) - [tihmsta
 
 
 ReadMe updated on:
-     2019-02-20
+     2019-04-21
