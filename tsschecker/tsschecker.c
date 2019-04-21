@@ -38,8 +38,8 @@
 #define FIRMWARE_JSON_URL "https://api.ipsw.me/v2.1/firmwares.json/condensed"
 #define FIRMWARE_OTA_JSON_URL "https://api.ipsw.me/v2.1/ota.json/condensed"
 
-#define NONCELEN_BASEBAND 20 // for devices with KTRR - 32
-#define NONCELEN_SEP      20 // for devices with KTRR - 32
+#define NONCELEN_BASEBAND 20 // for devices with A10(X)+ - 32
+#define NONCELEN_SEP      20 // for devices with A10(X)+ - 32
 
 #define swapchar(a,b) ((a) ^= (b),(b) ^= (a),(a) ^= (b)) //swaps a and b, unless they are the same variable
 #define printJString(str) printf("%.*s",(int)str->size,str->value)
@@ -70,7 +70,7 @@ static const char *win_path_get(enum paths path){
     if (tmp && *tmp){
         size_t len = strlen(tmp) + strlen(win_pathvars[path]) + 1;
         win_paths[path] = (char *)malloc(len);
-        memset((char*)win_paths[path],'\0',len);
+        memset((char*)win_paths[path], '\0', len);
         strcat((char*)win_paths[path], tmp);
         strcat((char*)win_paths[path], win_pathvars[path]);
         return win_paths[path];
@@ -156,7 +156,7 @@ static struct bbdevice bbdevices[] = {
     {"iPad2,1", 0, 0}, // iPad 2 Wi-Fi
     {"iPad2,2", 257, 12}, // iPad 2 GSM
     {"iPad2,3", 257, 12}, // iPad 2 CDMA
-    {"iPad2,4", 0, 0}, // iPad 2 Wi-Fi (2012)
+    {"iPad2,4", 0, 0}, // iPad 2 Wi-Fi (2012, Rev A)
     {"iPad3,1", 0, 0}, // the new iPad (3rd gen, Wi-Fi)
     {"iPad3,2", 4, 4}, // the new iPad (3rd gen, CDMA)
     {"iPad3,3", 4, 4}, // the new iPad (3rd gen, GSM)
@@ -182,7 +182,6 @@ static struct bbdevice bbdevices[] = {
     {"iPad5,2", 3840149528, 4}, // iPad mini 4 (Cellular)
     {"iPad11,1", 0, 0}, // iPad mini (5th generation, Wi-Fi)
     {"iPad11,2", 165673526, 12}, // iPad mini (5th generation, Cellular)
-    
     
     // iPad Airs
     {"iPad4,1", 0, 0}, // iPad Air (Wi-Fi)
@@ -671,7 +670,7 @@ int tss_populate_random(plist_t tssreq, int is64bit, t_devicevals *devVals){
         strncasecmp(devVals->deviceModel, "iPod4,", strlen("iPod4,")) == 0 ||
         strncasecmp(devVals->deviceModel, "iPod5,", strlen("iPod5,")) == 0 ||
         strncasecmp(devVals->deviceModel, "iPod7,", strlen("iPod7,")) == 0 )
-        nonceLen = 20; // valid for devices up to iPhone7
+        nonceLen = 20; // valid for devices without KTRR
     
     int n=0;
     srand((unsigned int)time(NULL));
@@ -685,8 +684,8 @@ int tss_populate_random(plist_t tssreq, int is64bit, t_devicevals *devVals){
     }else{
         devVals->apnonce = (char*)malloc((devVals->parsedApnonceLen = nonceLen)+1);
         if (nonceLen == 20) {
-            //this is a pre iPhone 7 device
-            //nonce is derived from generator with SHA1
+            /* this is a pre iPhone 7 device
+               nonces is derived from generator with SHA1 */
             unsigned char zz[9] = {0};
             
             for (int i=0; i<sizeof(devVals->generator)-1; i++) {
@@ -804,12 +803,12 @@ getID0:
             plist_dict_set_item(tssreq, "@ApImg4Ticket", plist_new_bool(0));
         if (plist_dict_get_item(tssreq, "@APTicket"))
             plist_dict_set_item(tssreq, "@APTicket", plist_new_bool(0));
-        //TO-DO don't use .shsh2 ending and don't save generator when saving only baseband
+        // TO-DO: don't use .shsh2 ending and don't save generator when saving only baseband
         info("[TSSR] User specified to request only a Baseband ticket.\n");
     }
 
     if (basebandMode != kBasebandModeWithoutBaseband) {
-        //TO-DO: verify that this being int64_t instead of uint64_t doesn't actually break something
+        // TO-DO: verify that this being int64_t instead of uint64_t doesn't actually break something
 
         t_bbdevice bbinfo = getBBDeviceInfo(devVals->deviceModel);
         int64_t BbGoldCertId = devVals->bbgcid ? devVals->bbgcid : bbinfo->bbgcid;
