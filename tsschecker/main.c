@@ -65,9 +65,9 @@ void cmd_help(){
     printf("Usage: tsschecker [OPTIONS]\n");
     printf("Works with signing technology on iOS devices\n\n");
     printf("  -d, --device MODEL\t\tspecific device by its MODEL (eg. iPhone11,8)\n");
-    printf("  -i, --ios VERSION\t\tspecific iOS version (eg. 12.2)\n");
-    printf("      --buildid BUILDID\t\tspecific buildid instead of iOS version (eg. 16E227)\n");
-    printf("  -B, --boardconfig BOARD\tspecific boardconfig instead of iPhone model (eg. n841ap)\n");
+    printf("  -i, --ios VERSION\t\tspecific iOS/tvOS/watchOS version (eg. 12.2)\n");
+    printf("      --buildid BUILDID\t\tspecific build ID instead of iOS/tvOS/watchOS version (eg. 16E227)\n");
+    printf("  -B, --boardconfig BOARD\tspecific boardconfig instead of device model (eg. n841ap)\n");
     printf("  -h, --help\t\t\tprints usage information\n");
     printf("  -o, --ota\t\t\tcheck OTA signing status, instead of normal restore\n");
     printf("  -b, --no-baseband\t\tdon't check baseband signing status. Request a ticket without baseband\n");
@@ -75,13 +75,13 @@ void cmd_help(){
     printf("  -s, --save\t\t\tsave fetched signing tickets (mostly makes sense with -e)\n");
     printf("  -u, --update-install\t\trequest update ticket instead of erase\n");
     printf("  -l, --latest\t\t\tuse latest public iOS version instead of manually specifying one\n");
-    printf("                 \t\tespecially useful with -s and -e for saving blobs\n");
-    printf("  -e, --ecid ECID\t\tmanually specify ECID to be used for fetching blobs, instead of using random ones\n");
+    printf("                 \t\tespecially useful with -s and -e for saving tickets\n");
+    printf("  -e, --ecid ECID\t\tmanually specify ECID to be used for fetching tickets, instead of using random ones\n");
     printf("                 \t\tECID must be either dec or hex eg. 5482657301265 or ab46efcbf71\n");
-    printf("      --apnonce NONCE\t\tmanually specify ApNonce instead of using random one (not required for saving blobs)\n");
-    printf("      --sepnonce NONCE\t\tmanually specify SepNonce instead of using random one (not required for saving blobs)\n");
+    printf("      --apnonce NONCE\t\tmanually specify ApNonce instead of using random one (not required for saving tickets)\n");
+    printf("      --sepnonce NONCE\t\tmanually specify SepNonce instead of using random one (not required for saving tickets)\n");
     printf("      --bbsnum SNUM\t\tmanually specify BbSNUM, in hex, for saving valid BBTicket\n");
-    printf("      --save-path PATH\t\tspecify path for saving blobs\n");
+    printf("      --save-path PATH\t\tspecify path for saving tickets\n");
     printf("      --generator GEN\t\tmanually specify generator in format 0x%%16llx\n");
     printf("      --beta\t\t\trequest signing tickets for beta instead of normal release (use with -o)\n");
     printf("      --list-devices\t\tlist all known devices\n");
@@ -99,7 +99,7 @@ int64_t parseECID(const char *ecid){
     int isHex = 0;
     int64_t ret = 0;
     
-    //in case hex ecid only contains digits, specify with 0x1235
+    //in case hex ECID only contains digits, specify with 0x1235
     if (strncmp(ecid, "0x", 2) == 0){
         isHex = 1;
         ecidBK = ecid+2;
@@ -382,8 +382,10 @@ int main(int argc, const char * argv[]) {
     if (!buildmanifest) { //no need to get firmares/ota json if specifying buildmanifest manually
     reparse:
         firmwareJson = (versVals.isOta) ? getOtaJson() : getFirmwareJson();
-        if (!devVals.installType) //only set this if installType wasn't set manually
-            devVals.isUpdateInstall = (versVals.isOta); //there are no erase installs over OTA
+        /* only set this if installType wasn't set manually */
+        if (!devVals.installType)
+            /* there're no erase installs over OTA */
+            devVals.isUpdateInstall = (versVals.isOta);
         if (!firmwareJson) reterror(-6,"[TSSC] could not get firmware.json\n");
         
         long cnt = parseTokens(firmwareJson, &firmwareTokens);
