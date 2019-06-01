@@ -38,10 +38,10 @@
 #define FIRMWARE_JSON_URL "https://api.ipsw.me/v2.1/firmwares.json/condensed"
 #define FIRMWARE_OTA_JSON_URL "https://api.ipsw.me/v2.1/ota.json/condensed"
 
-#define NONCELEN_BASEBAND 20 // for devices with A10(X)+ - 32
-#define NONCELEN_SEP      20 // for devices with A10(X)+ - 32
+#define NONCELEN_BASEBAND 20 // for devices with KTRR - 32
+#define NONCELEN_SEP      20 // for devices with KTRR - 32
 
-#define swapchar(a,b) ((a) ^= (b),(b) ^= (a),(a) ^= (b)) //swaps a and b, unless they are the same variable
+#define swapchar(a,b) ((a) ^= (b),(b) ^= (a),(a) ^= (b)) //swaps a and b, unless they're the same variable
 #define printJString(str) printf("%.*s",(int)str->size,str->value)
 
 #ifdef WIN32
@@ -117,6 +117,7 @@ static struct bbdevice bbdevices[] = {
     {"iPod4,1", 0, 0}, // 4th gen
     {"iPod5,1", 0, 0}, // 5th gen
     {"iPod7,1", 0, 0}, // 6th gen
+    {"iPod9,1", 0, 0}, // 7th gen
     
     // iPhones
     {"iPhone1,2", 0, 0}, // iPhone 3G
@@ -127,9 +128,9 @@ static struct bbdevice bbdevices[] = {
     {"iPhone4,1", 2, 4}, // iPhone 4s
     {"iPhone5,1", 3255536192, 4}, // iPhone 5 (GSM)
     {"iPhone5,2", 3255536192, 4}, // iPhone 5 (Global)
-    {"iPhone5,3", 3554301762, 4}, // iPhone 5c
+    {"iPhone5,3", 3554301762, 4}, // iPhone 5c (GSM)
     {"iPhone5,4", 3554301762, 4}, // iPhone 5c (Global)
-    {"iPhone6,1", 3554301762, 4}, // iPhone 5s
+    {"iPhone6,1", 3554301762, 4}, // iPhone 5s (GSM)
     {"iPhone6,2", 3554301762, 4}, // iPhone 5s (Global)
     {"iPhone7,1", 3840149528, 4}, // iPhone 6 Plus
     {"iPhone7,2", 3840149528, 4}, // iPhone 6
@@ -148,7 +149,7 @@ static struct bbdevice bbdevices[] = {
     {"iPhone10,6", 524245983, 12}, // iPhone X GSM
     {"iPhone11,2", 165673526, 12}, // iPhone XS
     {"iPhone11,4", 165673526, 12}, // iPhone XS Max (China)
-    {"iPhone11,6", 165673526, 12}, // iPhone XS Max
+    {"iPhone11,6", 165673526, 12}, // iPhone XS Max (Global)
     {"iPhone11,8", 165673526, 12}, // iPhone XR
 
     // iPads
@@ -160,9 +161,9 @@ static struct bbdevice bbdevices[] = {
     {"iPad3,1", 0, 0}, // the new iPad (3rd gen, Wi-Fi)
     {"iPad3,2", 4, 4}, // the new iPad (3rd gen, CDMA)
     {"iPad3,3", 4, 4}, // the new iPad (3rd gen, GSM)
-    {"iPad3,4", 0, 0}, // iPad with Retina Display (4th gen, Wi-Fi)
-    {"iPad3,5", 3255536192, 4}, // iPad with Retina Display (4th gen, CDMA)
-    {"iPad3,6", 3255536192, 4}, // iPad with Retina Display (4th gen, GSM)
+    {"iPad3,4", 0, 0}, // iPad with Retina display (4th gen, Wi-Fi)
+    {"iPad3,5", 3255536192, 4}, // iPad with Retina display (4th gen, CDMA)
+    {"iPad3,6", 3255536192, 4}, // iPad with Retina display (4th gen, GSM)
     {"iPad6,11", 0, 0}, // iPad (5th gen, 2017, Wi-Fi)
     {"iPad6,12", 3840149528, 4}, // iPad (5th gen, 2017, Cellular)
     {"iPad7,5", 0, 0}, // iPad (6th gen, 2018, Wi-Fi)
@@ -180,8 +181,8 @@ static struct bbdevice bbdevices[] = {
     {"iPad4,9", 3554301762, 4}, // iPad mini 3 (Cellular, China)
     {"iPad5,1", 0, 0}, // iPad mini 4 (Wi-Fi)
     {"iPad5,2", 3840149528, 4}, // iPad mini 4 (Cellular)
-    {"iPad11,1", 0, 0}, // iPad mini (5th generation, Wi-Fi)
-    {"iPad11,2", 165673526, 12}, // iPad mini (5th generation, Cellular)
+    {"iPad11,1", 0, 0}, // iPad mini (5th gen, Wi-Fi)
+    {"iPad11,2", 165673526, 12}, // iPad mini (5th gen, Cellular)
     
     // iPad Airs
     {"iPad4,1", 0, 0}, // iPad Air (Wi-Fi)
@@ -189,8 +190,8 @@ static struct bbdevice bbdevices[] = {
     {"iPad4,3", 3554301762, 4}, // iPad Air (Cellular, China)
     {"iPad5,3", 0, 0}, // iPad Air 2 (Wi-Fi)
     {"iPad5,4", 3840149528, 4}, // iPad Air 2 (Cellular)
-    {"iPad11,3", 0, 0}, // iPad Air (3rd generation, Wi-Fi)
-    {"iPad11,4", 165673526, 12}, // iPad Air (3rd generation, Cellular)
+    {"iPad11,3", 0, 0}, // iPad Air (3rd gen, Wi-Fi)
+    {"iPad11,4", 165673526, 12}, // iPad Air (3rd gen, Cellular)
     
     // iPad Pros
     {"iPad6,3", 0, 0}, // iPad Pro (9,7", Wi-Fi)
@@ -211,16 +212,16 @@ static struct bbdevice bbdevices[] = {
     {"iPad8,8", 165673526, 12}, // iPad Pro 12,9", 3rd gen, 1 TB model, Cellular)
     
     // Apple Watches
-    {"Watch1,1", 0, 0}, // Apple Watch Series 0 (38 mm)
-    {"Watch1,2", 0, 0}, // Apple Watch Series 0 (42 mm)
-    {"Watch2,3", 0, 0}, // Apple Watch Series 2 (38 mm)
-    {"Watch2,4", 0, 0}, // Apple Watch Series 2 (42 mm)
-    {"Watch2,6", 0, 0}, // Apple Watch Series 1 (38 mm)
-    {"Watch2,7", 0, 0}, // Apple Watch Series 1 (42 mm)
-    {"Watch3,3", 0, 0}, // Apple Watch Series 3 (38 mm)
-    {"Watch3,4", 0, 0}, // Apple Watch Series 3 (42 mm)
-    {"Watch4,1", 0, 0}, // Apple Watch Series 4 (40 mm)
-    {"Watch4,2", 0, 0}, // Apple Watch Series 4 (44 mm)
+    {"Watch1,1", 0, 0}, // Series 0 (38 mm)
+    {"Watch1,2", 0, 0}, // Series 0 (42 mm)
+    {"Watch2,3", 0, 0}, // Series 2 (38 mm)
+    {"Watch2,4", 0, 0}, // Series 2 (42 mm)
+    {"Watch2,6", 0, 0}, // Series 1 (38 mm)
+    {"Watch2,7", 0, 0}, // Series 1 (42 mm)
+    {"Watch3,3", 0, 0}, // Series 3 (38 mm)
+    {"Watch3,4", 0, 0}, // Series 3 (42 mm)
+    {"Watch4,1", 0, 0}, // Series 4 (40 mm)
+    {"Watch4,2", 0, 0}, // Series 4 (44 mm)
     
     // Apple TVs
     {"AppleTV1,1", 0, 0}, // 1st gen
@@ -646,7 +647,7 @@ int parseHex(const char *nonce, size_t *parsedLen, char *ret, size_t *retSize){
 }
 
 int tss_populate_random(plist_t tssreq, int is64bit, t_devicevals *devVals){
-    size_t nonceLen = 32; // valid for all devices after iPhone 7
+    size_t nonceLen = 32; // valid for devices with pre-KTRR
     if (!devVals->deviceModel)
         return error("[TSSR] internal error: devVals->deviceModel is missing\n"),-1;
 
@@ -684,7 +685,7 @@ int tss_populate_random(plist_t tssreq, int is64bit, t_devicevals *devVals){
     }else{
         devVals->apnonce = (char*)malloc((devVals->parsedApnonceLen = nonceLen)+1);
         if (nonceLen == 20) {
-            /* this is a pre iPhone 7 device
+            /* this is a pre-KTRR device
                nonces is derived from generator with SHA1 */
             unsigned char zz[9] = {0};
             
@@ -804,12 +805,11 @@ getID0:
         if (plist_dict_get_item(tssreq, "@APTicket"))
             plist_dict_set_item(tssreq, "@APTicket", plist_new_bool(0));
         // TO-DO: don't use .shsh2 ending and don't save generator when saving only baseband
-        info("[TSSR] User specified to request only a Baseband ticket.\n");
+        info("[TSSR] User specified to request only a baseband ticket.\n");
     }
 
     if (basebandMode != kBasebandModeWithoutBaseband) {
         // TO-DO: verify that this being int64_t instead of uint64_t doesn't actually break something
-
         t_bbdevice bbinfo = getBBDeviceInfo(devVals->deviceModel);
         int64_t BbGoldCertId = devVals->bbgcid ? devVals->bbgcid : bbinfo->bbgcid;
         size_t bbsnumSize = devVals->bbsnumSize ? devVals->bbsnumSize : bbinfo->bbsnumSize;
@@ -829,10 +829,10 @@ getID0:
                 reterror("[TSSR] Error: Failed to populate baseband values\n");
             }
         }else{
-            log("[TSSR] LOG: device %s doesn't need a Baseband ticket, continuing without requesting a Baseband ticket\n",devVals->deviceModel);
+            log("[TSSR] LOG: device %s doesn't need a baseband ticket, continuing without requesting a Baseband ticket\n",devVals->deviceModel);
         }
     }else{
-        info("[TSSR] User specified not to request a Baseband ticket.\n");
+        info("[TSSR] User specified not to request a baseband ticket.\n");
     }
     
     *tssreqret = tssreq;
@@ -1026,7 +1026,7 @@ int isVersionSignedForDevice(jssytok_t *firmwareTokens, t_iosVersion *versVals, 
         /* NOTE: Signing tickets technology available with iPhone OS 3.x only for iPhone 3Gs & iPod touch (3rd generation). Other devices have signing technology since iOS 4.
                  So, iPhone and iPod touch (1st generations) doesn't have signing technology for all firmwares; iPhone 3G and iPod touch (2nd generation) have it only for iOS 4+. */
         /* TO-DO: Checking device for rather device checking on iPhone OS 3.0 for goodly request signing tickets. */
-        info("[TSSC] version to check \"%s\" seems to be iOS 3 or lower, which did not require SHSH or APTicket.\n\tSkipping checks and returning true.\n",versVals->version);
+        info("[TSSC] version to check \"%s\" seems to be iPhone OS 3 or lower, which did not require SHSH or APTicket.\n\tSkipping checks and returning true.\n",versVals->version);
         return 1;
     }
     

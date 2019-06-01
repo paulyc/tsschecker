@@ -65,8 +65,8 @@ void cmd_help(){
     printf("Usage: tsschecker [OPTIONS]\n");
     printf("Works with signing technology on iOS devices\n\n");
     printf("  -d, --device MODEL\t\tspecific device by its MODEL (eg. iPhone11,8)\n");
-    printf("  -i, --ios VERSION\t\tspecific iOS/tvOS/watchOS version (eg. 12.2)\n");
-    printf("      --buildid BUILDID\t\tspecific build ID instead of iOS/tvOS/watchOS version (eg. 16E227)\n");
+    printf("  -i, --ios VERSION\t\tspecific iOS/tvOS/watchOS version (eg. 12.3.1)\n");
+    printf("      --buildid BUILDID\t\tspecific build ID instead of iOS/tvOS/watchOS version (eg. 16F203)\n");
     printf("  -B, --boardconfig BOARD\tspecific boardconfig instead of device model (eg. n841ap)\n");
     printf("  -h, --help\t\t\tprints usage information\n");
     printf("  -o, --ota\t\t\tcheck OTA signing status, instead of normal restore\n");
@@ -299,7 +299,7 @@ int main(int argc, const char * argv[]) {
         printf("Sending TSS request:\n%s",buf);
         
         char *rsp = tss_request_send_raw(buf, NULL, (int*)&bufSize);
-        printf("TSS server Returned:\n%s\n",rsp);
+        printf("TSS server returned:\n%s\n",rsp);
         free(rsp);
         return 0;
     }
@@ -379,7 +379,7 @@ int main(int argc, const char * argv[]) {
         }
     }
 
-    if (!buildmanifest) { //no need to get firmares/ota json if specifying buildmanifest manually
+    if (!buildmanifest) { //no need to get firmwares/ota json if specifying buildmanifest manually
     reparse:
         firmwareJson = (versVals.isOta) ? getOtaJson() : getFirmwareJson();
         /* only set this if installType wasn't set manually */

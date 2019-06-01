@@ -1,17 +1,17 @@
 Recommmended save blobs with this generators:
 0x9d0b5b5ff92fff23
-0xbd34a880be0b53f3
+0xbd34a880be0b53f3 // default boot-nonce, used on Electra / Chimera jailbreaks
 0x4bb8834ba6444b50
 0x698337f5a79c3292
 0xedeeb72d7575e360
-0x1111111111111111
+0x1111111111111111 // default boot-nonce, used on unc0ver jailbreak
 
 Recovery collision ApNonces (some A7 devices with iOS 9.1-10.2):
 9e4c518009d00df190a450b3b47691768812360c
 9f4aeec726e7c682339ddb3c6c2dec52662dc517
 
 DFU collision ApNonces:
-1) for some A7 devices, some collisioned):
+1) for some A7 devices, some collisioned:
 6b83f831a6305ae90d57a78ba8eb9d81e7a9058f
 7d7bdc28e5eca36dc5bc20c791850f110dc28269
 6b81a2c3cdf87404dee28330f7fcb0ee62c425a1
@@ -32,7 +32,7 @@ b05a70468054cfe94251b34b58f28450054f1aa9
 99b5e22d771c0f1c81f70c394e9907993a2db435
 f5cce05e81a9be2ef66ec287f692ffdf20b13860
 
-2) for A8 devices, some collisioned
+2) for A8 devices, some collisioned:
 1a965b264168d077ad438546b09204e1d92d2c8b
 7ba89ec4cb77a7aa3be826ea55196d333f444cce
 b5992dc8a668fd474969111b9b1ff1997cf01bab
