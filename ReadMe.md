@@ -4,8 +4,8 @@ _tsschecker is a powerful tool to work with signing technology on iOS/tvOS/watch
 Latest compiled version can be found [here](https://github.com/s0uthwest/tsschecker/releases). Windows & Linux version are supported, but I won't compile it.
 
 ## Features  
-* Allows you to get lists of all devices and all iOS/tvOS/WatchOS OTA versions for a specific device.
-* Can check signing status for default iOS/tvOS/watchOS versions and beta iPSW's (by specifying a `BuildManifest.plist`)
+* Allows you to get lists of all devices and all iOS/tvOS/watchOS OTA versions for a specific device.
+* Can check signing status for default iOS/tvOS/watchOS versions.
 * Works without specifying any device relevant values to check signing status, but can be used to save blobs when given an ECID and the option `--print-tss-response` (although there are better tools to do this).
 * __If you want to save blobs with recommended ApNonce, please, see [this file](https://github.com/s0uthwest/tsschecker/blob/master/nonces.txt).__
 
@@ -18,7 +18,7 @@ By using all of its customization possibilities, you might discover a combinatio
   * [tss](https://github.com/libimobiledevice)
 * ## External Libs
   Make sure these are installed
-  * [libcurl](https://curl.haxx.se/libcurl/)
+  * [libcurl](https://github.com/curl/curl)
   * [libplist](https://github.com/libimobiledevice/libplist)
   * [libfragmentzip](https://github.com/encounter/libfragmentzip)
   * [openssl](https://github.com/openssl/openssl) or commonCrypto on macOS/OS X.
@@ -31,7 +31,7 @@ By using all of its customization possibilities, you might discover a combinatio
 Open terminal and execute the command: `./autogen.sh && make` or use Xcode project.
 The easiest way to install on macOS is using [`brew`](https://brew.sh): `brew install stek29/idevice/tsschecker-s0uthwest`.
 
-### Some about curl for ubuntu
+### Some about [cURL](https://github.com/curl/curl) for ubuntu
 Follow [this guide](https://dev.to/jake/using-libcurl3-and-libcurl4-on-ubuntu-1804-bionic-184g) to use tsschecker on Ubuntu 18.04 (Bionic) as it requires libcurl3 which cannot coexist with libcurl4 on this OS.
 
 ## Report an issue
@@ -42,4 +42,4 @@ Creator of [original project](https://github.com/tihmstar/tsschecker) - [tihmsta
 
 
 ReadMe updated on:
-     2019-04-21
+     2019-06-01
