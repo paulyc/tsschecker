@@ -28,8 +28,10 @@ By using all of its customization possibilities, you might discover a combinatio
 Open terminal and execute the command: `./autogen.sh && make` or use Xcode project.
 The easiest way to install on macOS is using [`brew`](https://brew.sh): `brew install stek29/idevice/tsschecker-s0uthwest`.
 
-### Some about [cURL](https://github.com/curl/curl) for ubuntu
-Follow [this guide](https://dev.to/jake/using-libcurl3-and-libcurl4-on-ubuntu-1804-bionic-184g) to use tsschecker on Ubuntu 18.04 (Bionic) as it requires libcurl3 which cannot coexist with libcurl4 on this OS.
+### Some about [cURL](https://github.com/curl/curl)
+* Linux: Follow [this guide](https://dev.to/jake/using-libcurl3-and-libcurl4-on-ubuntu-1804-bionic-184g) to use tsschecker on Ubuntu 18.04 (Bionic) as it requires libcurl3 which cannot coexist with libcurl4 on this OS.
+* macOS: open file [Makefile.am](https://github.com/s0uthwest/tsschecker/blob/master/tsschecker/Makefile.am) and update line with LDADD: `tsschecker_LDADD = $(AM_LDFLAGS) libjssy.a /usr/lib/libcurl.4.dylib`
+   It required for downloading JSON files from ipsw.me for now.
 
 ## Report an issue
 You can do it [here](https://github.com/s0uthwest/tsschecker/issues).

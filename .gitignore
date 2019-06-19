@@ -1,14 +1,14 @@
 *.DS_Store
 .patch
 *.diff
-*/.libs/*
-*/.deps/*
+*/.libs
+*/.deps
 *.a
 *.o
 *.la
 *.lo
 .*.swp
-Makefile*
+*Makefile*
 aclocal.m4
 autom4te.cache
 compile
