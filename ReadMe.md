@@ -4,27 +4,24 @@ _tsschecker is a powerful tool to work with signing technology on iOS/tvOS/watch
 Latest compiled version can be found [here](https://github.com/s0uthwest/tsschecker/releases). Windows & Linux version are supported, but I won't compile it.
 
 ## Features  
-* Allows you to get lists of all devices and all iOS/tvOS/watchOS OTA versions for a specific device.
+* Allows you to get lists of all iOS/tvOS/watchOS versions for a specific device.
 * Can check signing status for default iOS/tvOS/watchOS versions.
-* Works without specifying any device relevant values to check signing status, but can be used to save blobs when given an ECID and the option `--print-tss-response` (although there are better tools to do this).
-* __If you want to save blobs with recommended ApNonce, please, see [this file](https://github.com/s0uthwest/tsschecker/blob/master/nonces.txt).__
+* Works without specifying any device relevant values to check signing status, but can be used to save signing tickets when given an ECID and the option `--print-tss-response` (although there are better tools to do this).
+* __If you'll want to save signing tickets with recommended ApNonces, please, see [this file](https://github.com/s0uthwest/tsschecker/blob/master/nonces.txt).__
 
 tsschecker isn't only meant to be used to check signing status, but also to explore Apple's TSS servers.
 By using all of its customization possibilities, you might discover a combination of devices and iOS versions that is now getting signed but wasn't getting signed before.  
 
 # Dependencies
 *  ## Bundled Libs
-  Those don't need to be installed manually
-  * [tss](https://github.com/libimobiledevice)
+  * [tss](https://github.com/libimobiledevice);
 * ## External Libs
-  Make sure these are installed
-  * [libcurl](https://github.com/curl/curl)
-  * [libplist](https://github.com/libimobiledevice/libplist)
-  * [libfragmentzip](https://github.com/encounter/libfragmentzip)
-  * [openssl](https://github.com/openssl/openssl) or commonCrypto on macOS/OS X.
-  * [libirecovery](https://github.com/libimobiledevice/libirecovery)
+  * [libcurl](https://github.com/curl/curl);
+  * [libplist](https://github.com/libimobiledevice/libplist);
+  * [libfragmentzip](https://github.com/s0uthwest/libfragmentzip);
+  * [openssl](https://github.com/openssl/openssl) or commonCrypto on macOS/OS X;
+  * [libirecovery](https://github.com/s0uthwest/libirecovery);
 * ## Submodules
-  Make sure these projects compile on your system
   * [jssy](https://github.com/tihmstar/jssy)
 
 ## Compiling & installing
@@ -42,4 +39,4 @@ Creator of [original project](https://github.com/tihmstar/tsschecker) - [tihmsta
 
 
 ReadMe updated on:
-     2019-06-01
+     2019-06-19

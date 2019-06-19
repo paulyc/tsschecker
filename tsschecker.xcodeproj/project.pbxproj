@@ -186,6 +186,7 @@
 				TargetAttributes = {
 					87EB909E1C2940CD002CEE70 = {
 						CreatedOnToolsVersion = 7.2;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -194,8 +195,6 @@
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
-				Base,
 			);
 			mainGroup = 87EB90961C2940CD002CEE70;
 			productRefGroup = 87EB90A01C2940CD002CEE70 /* Products */;
@@ -371,15 +370,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
 					/opt/local/include,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_CFLAGS = "-std=c11";
 				PRODUCT_BUNDLE_IDENTIFIER = net.tihmstar.tsschecker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/jssy\"";
 			};
 			name = Debug;
@@ -388,15 +392,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
 					/opt/local/include,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_CFLAGS = "-std=c11";
 				PRODUCT_BUNDLE_IDENTIFIER = net.tihmstar.tsschecker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/jssy\"";
 			};
 			name = Release;
