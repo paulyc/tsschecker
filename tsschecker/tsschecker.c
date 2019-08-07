@@ -705,7 +705,7 @@ int tss_populate_random(plist_t tssreq, int is64bit, t_devicevals *devVals){
         makesha1:
             SHA1(zz, 8, (unsigned char*)devVals->apnonce);
         }else if (nonceLen == 32){
-            unsigned char zz[8] = {0};
+            unsigned char zz[9] = {0};
             unsigned char genHash[48]; //SHA384 digest length
             
             for (int i=0; i<sizeof(devVals->generator)-1; i++) {
