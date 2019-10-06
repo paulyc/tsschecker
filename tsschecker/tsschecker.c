@@ -151,6 +151,9 @@ static struct bbdevice bbdevices[] = {
     {"iPhone11,4", 165673526, 12}, // iPhone XS Max (China)
     {"iPhone11,6", 165673526, 12}, // iPhone XS Max (Global)
     {"iPhone11,8", 165673526, 12}, // iPhone XR
+ // {"iPhone12,1", 524245983, 12}, // iPhone 11
+ // {"iPhone12,3", 524245983, 12}, // iPhone 11 Pro
+ // {"iPhone12,5", 524245983, 12}, // iPhone 11 Pro Max
 
     // iPads
     {"iPad1,1", 0, 0}, // iPad (1st gen)
@@ -168,6 +171,8 @@ static struct bbdevice bbdevices[] = {
     {"iPad6,12", 3840149528, 4}, // iPad (5th gen, 2017, Cellular)
     {"iPad7,5", 0, 0}, // iPad (6th gen, 2018, Wi-Fi)
     {"iPad7,6", 3840149528, 4}, // iPad (6th gen, 2018, Cellular)
+    {"iPad7,11", 0, 0}, // iPad (7th gen, 2019, Wi-Fi)
+ // {"iPad7,12", 524245983, 12}, // iPad (7th gen, 2019, Cellular)
     
     // iPad minis
     {"iPad2,5", 0, 0}, // iPad mini (1st gen, Wi-Fi)
