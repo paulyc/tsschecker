@@ -1,7 +1,8 @@
 AC_PREREQ([2.69])
-AC_INIT([tsschecker], [1.0], [https://github.com/s0uthwest/tsschecker/issues])
-AM_INIT_AUTOMAKE([foreign])
+AC_INIT([tsschecker], [1.0.4], [tihmstar@gmail.com])
 
+# prepare for automake
+AM_INIT_AUTOMAKE([foreign])
 AC_CONFIG_SRCDIR([tsschecker/tsschecker.h])
 AC_CONFIG_HEADERS([config.h])
 
@@ -12,7 +13,7 @@ AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 AC_CONFIG_MACRO_DIRS([m4])
 
-# Version bump
+# Versioning.
 CFLAGS+=" -D TSSCHECKER_VERSION_COUNT=\\\"$(git rev-list --count HEAD | tr -d '\n')\\\""
 CFLAGS+=" -D TSSCHECKER_VERSION_SHA=\\\"$(git rev-parse HEAD | tr -d '\n')\\\""
 
@@ -44,7 +45,7 @@ AS_IF([test "x$with_libcrypto" != xno],
 PKG_CHECK_MODULES(libirecovery, libirecovery >= 0.2.0)
 
 # Checks for header files.
-AC_CHECK_HEADERS([stddef.h stdlib.h string.h unistd.h])
+AC_CHECK_HEADERS([getopt.h stddef.h stdlib.h string.h stdio.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_INT32_T

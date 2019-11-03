@@ -22,8 +22,8 @@
 
 #include <libfragmentzip/libfragmentzip.h>
 #include <libirecovery.h>
-
 #include "tsschecker.h"
+#include "debug.h"
 #include "download.h"
 #include "tss.h"
 
@@ -274,7 +274,7 @@ char *getOtaJson(){
     return fJson;
 }
 
-/* more get functions */
+#pragma mark more get functions
 const char *getBoardconfigFromModel(const char *model){
     const char *rt = NULL;
     irecv_device_t table = irecv_devices_get_all();
@@ -334,9 +334,11 @@ plist_t getBuildidentityWithBoardconfig(plist_t buildManifest, const char *board
         }
         char *string = NULL;
         plist_get_string_val(RestoreBehavior, &string);
-        //assuming there are only Erase and Update. If it's not Erase it must be Update also converting isUpdateInstall to bool (1 or 0)
+        /* assuming there are only Erase and Update. If it's not Erase it must be Update
+           also converting isUpdateInstall to bool (1 or 0) */
         if ((strncmp(string, "Erase", strlen(string)) != 0) == !isUpdateInstall){
-            //continue when Erase found but isUpdateInstall is true or Update found and isUpdateInstall is false
+            /* continue when Erase found but isUpdateInstall
+               is true or Update found and isUpdateInstall is false */
             rt = NULL;
             continue;
         }
@@ -372,7 +374,8 @@ error:
 #undef reterror
 }
 
-/* json functions */
+#pragma mark json functions
+
 long parseTokens(const char *json, jssytok_t **tokens){
     log("[JSON] counting elements\n");
     long tokensCnt = jssy_parse(json, strlen(json), NULL, 0);
@@ -517,8 +520,9 @@ char *getBuildManifest(char *url, const char *device, const char *version, const
     if (!url) {
         if (!f || nocache) return NULL;
         info("[TSSC] using cached Buildmanifest for %s\n",name);
-    }else
+    }else{
         info("[TSSC] opening Buildmanifest for %s\n",name);
+    }
     
     if (!f || nocache){
         //download if it isn't there
@@ -547,7 +551,7 @@ t_bbdevice getBBDeviceInfo(const char *deviceModel){
     
     while (bbdevs->deviceModel && strcasecmp(bbdevs->deviceModel, deviceModel) != 0)
         bbdevs++;
-    
+
     return bbdevs;
 }
 
@@ -562,9 +566,9 @@ void getRandNum(char *dst, size_t size, int base){
     }
 }
 
-/* TSS functions */
+#pragma mark tss functions
 int tss_populate_devicevals(plist_t tssreq, uint64_t ecid, char *nonce, size_t nonce_size, char *sep_nonce, size_t sep_nonce_size, int image4supported){
-    plist_dict_set_item(tssreq, "ApECID", plist_new_uint(ecid));
+    plist_dict_set_item(tssreq, "ApECID", plist_new_uint(ecid)); //0000000000000000
     if (nonce) {
         plist_dict_set_item(tssreq, "ApNonce", plist_new_data(nonce, nonce_size));
     }
@@ -590,25 +594,29 @@ int tss_populate_basebandvals(plist_t tssreq, plist_t tssparameters, int64_t BbG
     int ret = 0;
     plist_t parameters = plist_copy(tssparameters);
     char bbnonce[NONCELEN_BASEBAND+1];
-
+    
     int did_malloc_bbsnum = 0;
     if (!BbSNUM) {
         BbSNUM = (uint8_t *)malloc(bbsnumSize);
         getRandNum((char *)BbSNUM, bbsnumSize, 256);
         did_malloc_bbsnum = 1;
     }
+    
     int64_t BbChipID = 0;
     
     getRandNum(bbnonce, NONCELEN_BASEBAND, 256);
     srand((unsigned int)time(NULL));
     int n=0; for (int i=1; i<7; i++) BbChipID += (rand() % 10) * pow(10, ++n);
-
+    
     /* BasebandNonce not required */
+//  plist_dict_set_item(parameters, "BbNonce", plist_new_data(bbnonce, noncelen));
+//  plist_dict_set_item(parameters, "BbChipID", plist_new_uint(BbChipID));
     plist_dict_set_item(parameters, "BbGoldCertId", plist_new_uint(BbGoldCertId));
     plist_dict_set_item(parameters, "BbSNUM", plist_new_data((char *)BbSNUM, bbsnumSize));
-
+    
+    /* BasebandFirmware */
     if (tss_request_add_baseband_tags(tssreq, parameters, NULL) < 0) {
-        reterror("[TSSR] Error: Failed to add baseband tags to TSS request\n");
+        reterror("[TSSR] failed to add baseband tags to TSS request\n");
     }
     
 error:
@@ -657,27 +665,29 @@ int tss_populate_random(plist_t tssreq, int is64bit, t_devicevals *devVals){
         return error("[TSSR] internal error: devVals->deviceModel is missing\n"),-1;
 
     if (strncasecmp(devVals->deviceModel, "AppleTV2,", strlen("AppleTV2,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "AppleTV3,", strlen("AppleTV3,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "AppleTV5,", strlen("AppleTV5,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPad1,", strlen("iPad1,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPad2,", strlen("iPad2,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPad3,", strlen("iPad3,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPad4,", strlen("iPad4,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPad5,", strlen("iPad5,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPad6,", strlen("iPad6,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPhone2,", strlen("iPhone2,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPhone3,", strlen("iPhone3,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPhone4,", strlen("iPhone4,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPhone5,", strlen("iPhone5,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPhone6,", strlen("iPhone6,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPhone7,", strlen("iPhone7,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPhone8,", strlen("iPhone8,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPod3,", strlen("iPod3,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPod4,", strlen("iPod4,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPod5,", strlen("iPod5,")) == 0 ||
-        strncasecmp(devVals->deviceModel, "iPod7,", strlen("iPod7,")) == 0 )
-        nonceLen = 20; // valid for devices without KTRR
-    
+            strncasecmp(devVals->deviceModel, "AppleTV3,", strlen("AppleTV3,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "AppleTV5,", strlen("AppleTV5,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPad1,", strlen("iPad1,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPad2,", strlen("iPad2,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPad3,", strlen("iPad3,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPad4,", strlen("iPad4,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPad5,", strlen("iPad5,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPad6,", strlen("iPad6,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPhone1,", strlen("iPhone1,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPhone2,", strlen("iPhone2,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPhone3,", strlen("iPhone3,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPhone4,", strlen("iPhone4,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPhone5,", strlen("iPhone5,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPhone6,", strlen("iPhone6,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPhone7,", strlen("iPhone7,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPhone8,", strlen("iPhone8,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPod2,", strlen("iPod2,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPod3,", strlen("iPod3,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPod4,", strlen("iPod4,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPod5,", strlen("iPod5,")) == 0 ||
+            strncasecmp(devVals->deviceModel, "iPod7,", strlen("iPod7,")) == 0 )
+        nonceLen = 20; //valid for devices without KTRR
+
     int n=0;
     srand((unsigned int)time(NULL));
     if (!devVals->ecid) for (int i=0; i<16; i++) devVals->ecid += (rand() % 10) * pow(10, n++);
@@ -689,6 +699,7 @@ int tss_populate_random(plist_t tssreq, int is64bit, t_devicevals *devVals){
             return error("[TSSR] parsed ApNoncelen != requiredApNoncelen (%u != %u)\n",(unsigned int)devVals->parsedApnonceLen,(unsigned int)nonceLen),-1;
     }else{
         devVals->apnonce = (char*)malloc((devVals->parsedApnonceLen = nonceLen)+1);
+        //nonce is derived from generator with SHA1
         if (nonceLen == 20) {
             /* this is a pre-KTRR device
                nonces is derived from generator with SHA1 */
@@ -809,12 +820,12 @@ getID0:
             plist_dict_set_item(tssreq, "@ApImg4Ticket", plist_new_bool(0));
         if (plist_dict_get_item(tssreq, "@APTicket"))
             plist_dict_set_item(tssreq, "@APTicket", plist_new_bool(0));
-        // TO-DO: don't use .shsh2 ending and don't save generator when saving only baseband
-        info("[TSSR] User specified to request only a baseband ticket.\n");
+        //TODO: don't use .shsh2 ending and don't save generator when saving only baseband
+        info("[TSSR] User specified to request only a Baseband ticket.\n");
     }
 
     if (basebandMode != kBasebandModeWithoutBaseband) {
-        // TO-DO: verify that this being int64_t instead of uint64_t doesn't actually break something
+        //TODO: verify that this being int64_t instead of uint64_t doesn't actually break something
         t_bbdevice bbinfo = getBBDeviceInfo(devVals->deviceModel);
         int64_t BbGoldCertId = devVals->bbgcid ? devVals->bbgcid : bbinfo->bbgcid;
         size_t bbsnumSize = devVals->bbsnumSize ? devVals->bbsnumSize : bbinfo->bbsnumSize;
@@ -829,7 +840,6 @@ getID0:
             }
             warning("[TSSR] there was an error getting BasebandGoldCertID, continuing without requesting Baseband ticket\n");
         }else if (BbGoldCertId) {
-    
             if (tss_populate_basebandvals(tssreq, tssparameter, BbGoldCertId, devVals->bbsnum, bbsnumSize) < 0) {
                 reterror("[TSSR] Error: Failed to populate baseband values\n");
             }
@@ -858,10 +868,10 @@ int isManifestBufSignedForDevice(char *buildManifestBuffer, t_devicevals *devVal
     plist_t apticket3 = NULL;
     
     if (tssrequest(&tssreq, buildManifestBuffer, devVals, basebandMode))
-        reterror("[TSSR] faild to build TSS request\n");
+        reterror("[TSSR] failed to build tss request\n");
 
     isSigned = ((apticket = tss_request_send(tssreq, NULL)) > 0);
-
+    
     if (print_tss_response) debug_plist(apticket);
     if (isSigned && save_shshblobs){
         if (!devVals->installType){
@@ -869,7 +879,7 @@ int isManifestBufSignedForDevice(char *buildManifestBuffer, t_devicevals *devVal
             info("also requesting APTicket for update installing\n");
             devVals->installType = kInstallTypeUpdate;
             if (tssrequest(&tssreq2, buildManifestBuffer, devVals, basebandMode)){
-                warning("[TSSR] faild to build tssrequest for alternative installType\n");
+                warning("[TSSR] failed to build tssrequest for alternative installType\n");
             }else{
                 apticket2 = tss_request_send(tssreq2, NULL);
                 if (print_tss_response) debug_plist(apticket2);

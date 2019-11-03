@@ -1,5 +1,5 @@
 *.DS_Store
-.patch
+*.patch
 *.diff
 */.libs
 */.deps
@@ -24,3 +24,7 @@ missing
 */tsschecker
 */tsschecker.exe
 stamp-h1
+*/all.h*
+*/tsschecker*
+stamp-h1
+xcuserdata/*

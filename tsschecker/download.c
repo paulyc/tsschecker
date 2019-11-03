@@ -6,8 +6,8 @@
 //  Copyright © 2016 tihmstar. All rights reserved.
 //
 
-#include "download.h"
 #include <curl/curl.h>
+#include "download.h"
 
 size_t my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream)
 {

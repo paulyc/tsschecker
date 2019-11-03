@@ -9,7 +9,6 @@
 #ifndef all_h
 #define all_h
 
-// version bump
 #ifdef DEBUG // this is for developing with Xcode
 #define TSSCHECKER_VERSION_COUNT "Debug"
 #define TSSCHECKER_VERSION_SHA "Build: " __DATE__ " " __TIME__

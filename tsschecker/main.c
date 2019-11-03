@@ -6,10 +6,10 @@
 //  Copyright © 2015 tihmstar. All rights reserved.
 //
 
+#ifdef __STDC_ALLOC_LIB__
+#define __STDC_WANT_LIB_EXT2__ 1
+#else
 #define _POSIX_C_SOURCE 200809L
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
 #endif
 
 #include <stdio.h>
@@ -19,10 +19,12 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#include <libfragmentzip/libfragmentzip.h>
+
 #include "download.h"
+#include "debug.h"
 #include "tsschecker.h"
 #include "all.h"
-#include "debug.h"
 
 #define FLAG_LIST_IOS       (1 << 0)
 #define FLAG_LIST_DEVICES   (1 << 1)
@@ -55,7 +57,8 @@ static struct option longopts[] = {
     { "nocache",            no_argument,       NULL,  7  },
     { "apnonce",            required_argument, NULL,  8  },
     { "sepnonce",           required_argument, NULL,  9  },
-    { "raw",                required_argument, NULL,  10 },
+    { "raw",                required_argument, NULL, 10  },
+    { "bbsnum",             required_argument, NULL, 11  },
     { "generator",          required_argument, NULL, 'g' },
     { "bbsnum",             required_argument, NULL,  11 },
     { NULL, 0, NULL, 0 }
@@ -63,35 +66,34 @@ static struct option longopts[] = {
 
 void cmd_help(){
     printf("Usage: tsschecker [OPTIONS]\n");
-    printf("Works with signing technology on iOS devices\n\n");
-    printf("  -d, --device MODEL\t\tspecific device by its MODEL (eg. iPhone11,8)\n");
-    printf("  -i, --ios VERSION\t\tspecific iOS/tvOS/watchOS version (eg. 12.3.1)\n");
-    printf("      --buildid BUILDID\t\tspecific build ID instead of iOS/tvOS/watchOS version (eg. 16F203)\n");
-    printf("  -B, --boardconfig BOARD\tspecific boardconfig instead of device model (eg. n841ap)\n");
+    printf("Checks (real) signing status of device/firmware\n\n");
+    printf("  -d, --device MODEL\t\tspecific device by its model (eg. iPhone4,1)\n");
+    printf("  -i, --ios VERSION\t\tspecific iOS version (eg. 6.1.3)\n");
+    printf("  -Z  --buildid BUILDID\t\tspecific buildid instead of iOS version (eg. 13C75)\n");
+    printf("  -B, --boardconfig BOARD\tspecific boardconfig instead of iPhone model (eg. n61ap)\n");
     printf("  -h, --help\t\t\tprints usage information\n");
     printf("  -o, --ota\t\t\tcheck OTA signing status, instead of normal restore\n");
     printf("  -b, --no-baseband\t\tdon't check baseband signing status. Request a ticket without baseband\n");
-    printf("  -m, --build-manifest\t\tmanually specify BuildManifest (can be used with -d)\n");
-    printf("  -s, --save\t\t\tsave fetched signing tickets (mostly makes sense with -e)\n");
-    printf("  -u, --update-install\t\trequest update ticket instead of erase\n");
+    printf("  -m, --build-manifest\t\tmanually specify buildmanifest (can be used with -d)\n");
+    printf("  -s, --save\t\t\tsave fetched shsh blobs (mostly makes sense with -e)\n");
+    printf("  -u, --update-install\t\t\trequest update ticket instead of erase\n");
     printf("  -l, --latest\t\t\tuse latest public iOS version instead of manually specifying one\n");
     printf("                 \t\tespecially useful with -s and -e for saving tickets\n");
     printf("  -e, --ecid ECID\t\tmanually specify ECID to be used for fetching tickets, instead of using random ones\n");
     printf("                 \t\tECID must be either dec or hex eg. 5482657301265 or ab46efcbf71\n");
-    printf("      --apnonce NONCE\t\tmanually specify ApNonce instead of using random one (not required for saving tickets)\n");
-    printf("      --sepnonce NONCE\t\tmanually specify SepNonce instead of using random one (not required for saving tickets)\n");
-    printf("      --bbsnum SNUM\t\tmanually specify BbSNUM, in hex, for saving valid BBTicket\n");
-    printf("      --save-path PATH\t\tspecify path for saving tickets\n");
-    printf("      --generator GEN\t\tmanually specify generator in format 0x%%16llx\n");
-    printf("      --beta\t\t\trequest signing tickets for beta instead of normal release (use with -o)\n");
+    printf("      --apnonce NONCE\t\tmanually specify ApNonce instead of using random one (not required for saving blobs)\n");
+    printf("      --sepnonce NONCE\t\tmanually specify SepNonce instead of using random one (not required for saving blobs)\n");
+    printf("      --bbsnum SNUM\t\tmanually specify BbSNUM in HEX for saving valid BBTicket\n");
+    printf("  -g, --generator GEN\t\tmanually specify generator in format 0x%%16llx\n");
+    printf("      --save-path PATH\t\tspecify path for saving blobs\n");
+    printf("  -h, --help\t\t\tprints usage information\n");
+    printf("      --beta\t\t\trequest ticket for beta instead of normal release (use with -o)\n");
     printf("      --list-devices\t\tlist all known devices\n");
     printf("      --list-ios\t\tlist all known iOS versions\n");
     printf("      --nocache \t\tignore caches and redownload required files\n");
-    printf("      --print-tss-request\n");
-    printf("      --print-tss-response\n");
+    printf("      --print-tss-request\tprint TSS request that will be sent to Apple\n");
+    printf("      --print-tss-response\tprint TSS response that come from Apple\n");
     printf("      --raw\t\t\tsend raw file to Apple's TSS server (useful for debugging)\n\n");
-    printf("Homepage: https://github.com/s0uthwest/tsschecker\n");
-    printf("Original project: https://github.com/tihmstar/tsschecker\n");
 }
 
 int64_t parseECID(const char *ecid){
@@ -150,7 +152,8 @@ char *parseNonce(const char *nonce, size_t *parsedLen){
 int main(int argc, const char * argv[]) {
     int err = 0;
     int isSigned = 0;
-    printf("Version: "TSSCHECKER_VERSION_SHA" - "TSSCHECKER_VERSION_COUNT"\n"); // versioning
+    printf("Version: "TSSCHECKER_VERSION_SHA" - "TSSCHECKER_VERSION_COUNT"\n");
+    printf("%s\n",fragmentzip_version());
     
     dbglog = 1;
     idevicerestore_debug = 0;
@@ -188,7 +191,7 @@ int main(int argc, const char * argv[]) {
                 if (versVals.version) reterror(-9, "[TSSC] parsing parameter failed!\n");
                 versVals.version = strdup(optarg);
                 break;
-            case 'Z': // long option: "ios"; can be called as short option
+            case 'Z': // long option: "buildid"; can be called as short option
                 versVals.buildID = strdup(optarg);
                 break;
             case 'B': // long option: "boardconfig"; can be called as short option
@@ -274,7 +277,7 @@ int main(int argc, const char * argv[]) {
                 rawFilePath = optarg;
                 idevicerestore_debug = 1;
                 break;
-            case 11: // only long option "bbsnum"
+            case 11: // only long option: "bbsnum"
                 bbsnum = optarg;
                 break;
             default:
@@ -297,8 +300,8 @@ int main(int argc, const char * argv[]) {
         fclose(f);
         
         printf("Sending TSS request:\n%s",buf);
-        
         char *rsp = tss_request_send_raw(buf, NULL, (int*)&bufSize);
+
         printf("TSS server returned:\n%s\n",rsp);
         free(rsp);
         return 0;
@@ -318,7 +321,7 @@ int main(int argc, const char * argv[]) {
         }
     }
     
-    if (devVals.deviceModel){
+    if (devVals.deviceModel) {
         for (char *c = devVals.deviceModel; *c; c++)
             *c = tolower(*c); //make devicemodel lowercase
         //make devicemodel look nice. This is completely optional
@@ -369,10 +372,10 @@ int main(int argc, const char * argv[]) {
             unsigned char *tmp = devVals.bbsnum;
             for (int i=0; i< devVals.bbsnumSize; i++) info("%02x", *tmp++);
             info("\n");
-
+            
             if (bbinfo->bbsnumSize != devVals.bbsnumSize) {
                 reterror(-8, "[TSSC] BbSNUM length for this device should be %d, but you gave one of length %d\n", (int)bbinfo->bbsnumSize,
-                    (int)devVals.bbsnumSize);
+                         (int)devVals.bbsnumSize);
             }
         } else {
             reterror(-7, "[TSSC] manually specified bbsnum=%s, but parsing failed\n", bbsnum);
@@ -399,7 +402,7 @@ int main(int argc, const char * argv[]) {
         }
     }
 
-    if (flags & FLAG_LATEST_IOS && !versVals.version){
+    if (flags & FLAG_LATEST_IOS && !versVals.version) {
         int versionCnt = 0;
         int i = 0;
             

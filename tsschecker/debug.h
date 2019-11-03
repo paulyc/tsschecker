@@ -3,7 +3,7 @@
 //  tsschecker
 //
 //  Created by s0uthwest on 08.01.19.
-//  Copyright © 2015 tihmstar. All rights reserved.
+//  Copyright © 2016 tihmstar. All rights reserved.
 //
 
 #ifndef debug_h
@@ -19,7 +19,6 @@ extern int idevicerestore_debug;
 
 // statis assert
 #define CASSERT(predicate, file) _impl_CASSERT_LINE(predicate,__LINE__,file)
-
 #define _impl_PASTE(a,b) a##b
 #define _impl_CASSERT_LINE(predicate, line, file) \
 typedef char _impl_PASTE(assertion_failed_##file##_,line)[2*!!(predicate)-1];
