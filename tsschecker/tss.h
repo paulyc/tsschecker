@@ -21,19 +21,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef IDEVICERESTORE_TSS_H
-#define IDEVICERESTORE_TSS_H
+#ifndef TSS_H
+#define TSS_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include <plist/plist.h>
-
 #include "debug.h"
 
 extern int print_tss_request;
-
+    
 /* parameters */
 int tss_parameters_add_from_manifest(plist_t parameters, plist_t build_identity);
 
@@ -73,4 +72,4 @@ char* ecid_to_string(uint64_t ecid);
 }
 #endif
 
-#endif
+#endif /* tss_h */

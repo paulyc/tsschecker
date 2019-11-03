@@ -379,6 +379,66 @@ int tss_parameters_add_from_manifest(plist_t parameters, plist_t build_identity)
 	}
 	node = NULL;
 
+	/* add Savage,PatchEpoch - Used for Savage firmware request */
+	node = plist_dict_get_item(build_identity, "Savage,PatchEpoch");
+	if (node) {
+		if (plist_get_node_type(node) == PLIST_STRING) {
+			char *strval = NULL;
+			int intval = 0;
+			plist_get_string_val(node, &strval);
+			sscanf(strval, "%x", &intval);
+			plist_dict_set_item(parameters, "Savage,PatchEpoch", plist_new_uint(intval));
+		} else {
+			plist_dict_set_item(parameters, "Savage,PatchEpoch", plist_copy(node));
+		}
+	}
+	node = NULL;
+    
+    /* Yonkers,BoardID - Used for Yonkers firmware request */
+    node = plist_dict_get_item(build_identity, "Yonkers,BoardID");
+    if (node) {
+        if (plist_get_node_type(node) == PLIST_STRING) {
+            char *strval = NULL;
+            int intval = 0;
+            plist_get_string_val(node, &strval);
+            sscanf(strval, "%x", &intval);
+            plist_dict_set_item(parameters, "Yonkers,BoardID", plist_new_uint(intval));
+        } else {
+            plist_dict_set_item(parameters, "Yonkers,BoardID", plist_copy(node));
+        }
+    }
+    node = NULL;
+    
+    /* Yonkers,ChipID - Used for Yonkers firmware request */
+    node = plist_dict_get_item(build_identity, "Yonkers,ChipID");
+    if (node) {
+        if (plist_get_node_type(node) == PLIST_STRING) {
+            char *strval = NULL;
+            int intval = 0;
+            plist_get_string_val(node, &strval);
+            sscanf(strval, "%x", &intval);
+            plist_dict_set_item(parameters, "Yonkers,ChipID", plist_new_uint(intval));
+        } else {
+            plist_dict_set_item(parameters, "Yonkers,ChipID", plist_copy(node));
+        }
+    }
+    node = NULL;
+    
+    /* add Yonkers,PatchEpoch - Used for Yonkers firmware request */
+    node = plist_dict_get_item(build_identity, "Yonkers,PatchEpoch");
+    if (node) {
+        if (plist_get_node_type(node) == PLIST_STRING) {
+            char *strval = NULL;
+            int intval = 0;
+            plist_get_string_val(node, &strval);
+            sscanf(strval, "%x", &intval);
+            plist_dict_set_item(parameters, "Yonkers,PatchEpoch", plist_new_uint(intval));
+        } else {
+            plist_dict_set_item(parameters, "Yonkers,PatchEpoch", plist_copy(node));
+        }
+    }
+    node = NULL;
+
 	/* add build identity manifest dictionary */
 	node = plist_dict_get_item(build_identity, "Manifest");
 	if (!node || plist_get_node_type(node) != PLIST_DICT) {
@@ -406,7 +466,7 @@ int tss_request_add_ap_img4_tags(plist_t request, plist_t parameters) {
             return -1;
         }
         plist_dict_set_item(request, "ApNonce", plist_copy(node));
-    }else
+    } else
         plist_dict_set_item(request, "ApNonce", plist_new_data(NULL, 0));
 	node = NULL;
 
@@ -874,6 +934,15 @@ int tss_request_add_se_tags(plist_t request, plist_t parameters, plist_t overrid
 	}
 	plist_dict_set_item(request, "SE,Nonce", plist_copy(node));
 	node = NULL;
+    
+    /* add SE,OSUPubKeyID */
+    node = plist_dict_get_item(parameters, "SE,OSUPubKeyID");
+    if (!node) {
+        tsserror("ERROR: %s: Unable to find required SE,OSUPubKeyID in parameters\n", __func__);
+        return -1;
+    }
+    plist_dict_set_item(request, "SE,OSUPubKeyID", plist_copy(node));
+    node = NULL;
 
 	/* add SE,RootKeyIdentifier */
 	node = plist_dict_get_item(parameters, "SE,RootKeyIdentifier");
@@ -1440,12 +1509,12 @@ char* tss_request_send_raw(char* request, const char* server_url_string, int* re
     if (response_lenth) *response_lenth = 0;
     
     const char* urls[6] = {
-        "https://gs.apple.com/TSS/controller?action=2",
-        "https://17.111.103.65/TSS/controller?action=2",
-        "https://17.111.103.15/TSS/controller?action=2",
-        "http://gs.apple.com/TSS/controller?action=2",
-        "http://17.111.103.65/TSS/controller?action=2",
-        "http://17.111.103.15/TSS/controller?action=2"
+        "https://gs.apple.com/TSS/controller?action=2", // original TSS server's address
+        "https://17.171.36.30/TSS/controller?action=2",
+        "https://17.151.36.30/TSS/controller?action=2",
+        "http://gs.apple.com/TSS/controller?action=2", // original TSS server's address
+        "http://17.171.36.30/TSS/controller?action=2",
+        "http://17.151.36.30/TSS/controller?action=2"
     };
     
     tss_response* response = NULL;
@@ -1537,6 +1606,9 @@ char* tss_request_send_raw(char* request, const char* server_url_string, int* re
             break;
         } else if (status_code == 128) {
             // ignoring error that occurs when saving blobs on certain A8(X) devices and earlier
+            break;
+        } else if (status_code == 128) {
+            // Error that occurs when saving blobs on certain A8(X) devices
             break;
         } else {
             error("ERROR: tss_send_request: Unhandled status code %d\n", status_code);

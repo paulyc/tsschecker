@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -160,6 +160,7 @@
 				87EB909B1C2940CD002CEE70 /* Sources */,
 				87EB909C1C2940CD002CEE70 /* Frameworks */,
 				87EB909D1C2940CD002CEE70 /* CopyFiles */,
+				561C73F1219738750030617C /* Version bump */,
 			);
 			buildRules = (
 			);
@@ -181,6 +182,7 @@
 				TargetAttributes = {
 					87EB909E1C2940CD002CEE70 = {
 						CreatedOnToolsVersion = 7.2;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -189,7 +191,6 @@
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 			);
 			mainGroup = 87EB90961C2940CD002CEE70;
 			productRefGroup = 87EB90A01C2940CD002CEE70 /* Products */;
@@ -200,6 +201,27 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		561C73F1219738750030617C /* Version bump */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Version bump";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "sed -i '.bak' \"s/.*TSSCHECKER_VERSION_COMMIT_COUNT.*/#define TSSCHECKER_VERSION_COMMIT_COUNT \\\"$(git rev-list --count HEAD)\\\"/\" ./tsschecker/all.h 2>/dev/null || sed -i \"s/.*TSSCHECKER_VERSION_COMMIT_COUNT.*/#define TSSCHECKER_VERSION_COMMIT_COUNT \\\"$(git rev-list --count HEAD)\\\"/\" ./tsschecker/all.h 2>/dev/null\nsed -i '.bak' \"s/.*TSSCHECKER_VERSION_COMMIT_SHA.*/#define TSSCHECKER_VERSION_COMMIT_SHA \\\"$(git rev-parse HEAD)\\\"/\" ./tsschecker/all.h 2>/dev/null || sed -i \"s/.*TSSCHECKER_VERSION_COMMIT_SHA.*/#define TSSCHECKER_VERSION_COMMIT_SHA \\\"$(git rev-parse HEAD)\\\"/\" ./tsschecker/all.h 2>/dev/null\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		87EB909B1C2940CD002CEE70 /* Sources */ = {
@@ -212,7 +234,9 @@
 				87CEC4C91C576BD9006E75FC /* tss.c in Sources */,
 				87F927AF1C3E455200343510 /* download.c in Sources */,
 				87EB90A31C2940CD002CEE70 /* main.c in Sources */,
-				87B93E861EE709A800709583 /* jssy.c in Sources */,
+				56163B0A21E4FCB00069A0B0 /* debug.h in Sources */,
+				56931F5C21D900D200A88574 /* all.h in Sources */,
+				56DA633E21E3412400821A21 /* ptr_smart.hpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,10 +289,19 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					/opt/local/include,
+				);
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = net.tihmstar.tsschecker;
+				PRODUCT_NAME = tsschecker;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/jssy\"";
 			};
 			name = Debug;
 		};
@@ -312,9 +345,18 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					/opt/local/include,
+				);
+				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = net.tihmstar.tsschecker;
+				PRODUCT_NAME = tsschecker;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/jssy\"";
 			};
 			name = Release;
 		};
@@ -329,9 +371,12 @@
 					/opt/local/include,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_CFLAGS = "-std=c11";
 				OTHER_CPLUSPLUSFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/jssy\"";
 			};
 			name = Debug;
 		};
@@ -346,9 +391,12 @@
 					/opt/local/include,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_CFLAGS = "-std=c11";
 				OTHER_CPLUSPLUSFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/external/jssy\"";
 			};
 			name = Release;
 		};

@@ -19,7 +19,7 @@ int downloadFile(const char *url, const char *dstPath){
     CURL *mcurl = curl_easy_init();
     
     FILE *dfile = fopen(dstPath, "w");
-    
+
     curl_easy_setopt(mcurl, CURLOPT_URL, url);
     curl_easy_setopt(mcurl, CURLOPT_TIMEOUT, 20L); //20 sec
     curl_easy_setopt(mcurl, CURLOPT_WRITEFUNCTION, my_fwrite);

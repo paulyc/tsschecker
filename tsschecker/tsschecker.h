@@ -112,9 +112,8 @@ const char *getModelFromBoardconfig(const char *boardconfig);
 plist_t getBuildidentity(plist_t buildManifest, const char *model, int isUpdateInstall);
 plist_t getBuildidentityWithBoardconfig(plist_t buildManifest, const char *boardconfig, int isUpdateInstall);
 
-
 #ifdef __cplusplus
 }
 #endif
     
-#endif /* tsscheker_h */
+#endif /* tsschecker_h */

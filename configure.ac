@@ -37,7 +37,7 @@ AC_ARG_WITH(
 )
 
 PKG_CHECK_MODULES(libplist, libplist >= 1.0)
-PKG_CHECK_MODULES(libcurl, libcurl >= 1.0)
+PKG_CHECK_MODULES(curl, libcurl >= 1.0)
 PKG_CHECK_MODULES(libfragmentzip, libfragmentzip >= 1.0)
 AS_IF([test "x$with_libcrypto" != xno],
     [PKG_CHECK_MODULES(libcrypto, libcrypto >= 1.0)]
@@ -68,8 +68,21 @@ case $CFLAGS in
   *)
   ;;
 esac
-
 AM_CONDITIONAL(NOMAIN, test x$nomain == xtrue)
+
+AC_MSG_CHECKING([whether to enable WIN32 specific flags])
+case "$host_os" in
+*mingw*)
+        win32=true
+        AC_MSG_RESULT([yes])
+	AC_CHECK_TOOL(WINDRES, windres)
+  ;;
+*)
+        win32=false
+        AC_MSG_RESULT([no])
+  ;;
+esac
+AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
 AC_CONFIG_FILES([Makefile tsschecker/Makefile])
 AC_OUTPUT

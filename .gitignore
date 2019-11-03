@@ -7,6 +7,7 @@
 *.o
 *.la
 *.lo
+.*.swp
 *Makefile*
 aclocal.m4
 autom4te.cache
@@ -19,6 +20,10 @@ libtool
 ltmain.sh
 m4
 missing
+*/all.h.bak
+*/tsschecker
+*/tsschecker.exe
+stamp-h1
 */all.h*
 */tsschecker*
 stamp-h1

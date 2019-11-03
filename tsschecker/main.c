@@ -60,6 +60,7 @@ static struct option longopts[] = {
     { "raw",                required_argument, NULL, 10  },
     { "bbsnum",             required_argument, NULL, 11  },
     { "generator",          required_argument, NULL, 'g' },
+    { "bbsnum",             required_argument, NULL,  11 },
     { NULL, 0, NULL, 0 }
 };
 
@@ -77,8 +78,8 @@ void cmd_help(){
     printf("  -s, --save\t\t\tsave fetched shsh blobs (mostly makes sense with -e)\n");
     printf("  -u, --update-install\t\t\trequest update ticket instead of erase\n");
     printf("  -l, --latest\t\t\tuse latest public iOS version instead of manually specifying one\n");
-    printf("                 \t\tespecially useful with -s and -e for saving blobs\n");
-    printf("  -e, --ecid ECID\t\tmanually specify ECID to be used for fetching blobs, instead of using random ones\n");
+    printf("                 \t\tespecially useful with -s and -e for saving tickets\n");
+    printf("  -e, --ecid ECID\t\tmanually specify ECID to be used for fetching tickets, instead of using random ones\n");
     printf("                 \t\tECID must be either dec or hex eg. 5482657301265 or ab46efcbf71\n");
     printf("      --apnonce NONCE\t\tmanually specify ApNonce instead of using random one (not required for saving blobs)\n");
     printf("      --sepnonce NONCE\t\tmanually specify SepNonce instead of using random one (not required for saving blobs)\n");
@@ -100,7 +101,7 @@ int64_t parseECID(const char *ecid){
     int isHex = 0;
     int64_t ret = 0;
     
-    //in case hex ecid only contains digits, specify with 0x1235
+    //in case hex ECID only contains digits, specify with 0x1235
     if (strncmp(ecid, "0x", 2) == 0){
         isHex = 1;
         ecidBK = ecid+2;
@@ -290,7 +291,7 @@ int main(int argc, const char * argv[]) {
         size_t bufSize = 0;
         FILE *f = fopen(rawFilePath, "rb");
         if (!f)
-            reterror(-100, "[TSSC] failed to read rawfile at \"%s\"\n",rawFilePath);
+            reterror(-100, "[TSSC] failed to read raw file at \"%s\"\n",rawFilePath);
         fseek(f, 0, SEEK_END);
         bufSize = ftell(f);
         fseek(f, 0, SEEK_SET);
@@ -316,7 +317,7 @@ int main(int argc, const char * argv[]) {
             if ((tmp = (char*)getModelFromBoardconfig(devVals.deviceBoard)))
                 devVals.deviceModel = strdup(tmp);
             else
-                reterror(-25, "[TSSC] If you using --boardconfig please also specify devicemodel with -d\n");
+                reterror(-25, "[TSSC] If you using --boardconfig please also specify device model with -d\n");
         }
     }
     
@@ -332,31 +333,31 @@ int main(int argc, const char * argv[]) {
     
     if (ecid) {
         if ((devVals.ecid = parseECID(ecid)) == 0){
-            reterror(-7, "[TSSC] manually specified ecid=%s, but parsing failed\n",ecid);
+            reterror(-7, "[TSSC] manually specified ECID=%s, but parsing failed\n",ecid);
         }else{
-            info("[TSSC] manually specified ecid to use, parsed \"%s\" to dec:%lld hex:%llx\n",ecid,devVals.ecid,devVals.ecid);
+            info("[TSSC] manually specified ECID to use, parsed \"%s\" to dec:%lld hex:%llx\n",ecid,devVals.ecid,devVals.ecid);
         }
     }
     
     if (apnonce) {
         if ((devVals.apnonce = parseNonce(apnonce,&devVals.parsedApnonceLen)) ){
-            info("[TSSC] manually specified apnonce to use, parsed \"%s\" to hex:",apnonce);
+            info("[TSSC] manually specified ApNonce to use, parsed \"%s\" to hex:",apnonce);
             unsigned char *tmp = (unsigned char*)devVals.apnonce;
             for (int i=0; i< devVals.parsedApnonceLen; i++) info("%02x",*tmp++);
             info("\n");
         }else{
-            reterror(-7, "[TSSC] manually specified apnonce=%s, but parsing failed\n",apnonce);
+            reterror(-7, "[TSSC] manually specified ApNonce=%s, but parsing failed\n",apnonce);
         }
     }
     
     if (sepnonce) {
         if ((devVals.sepnonce = parseNonce(sepnonce,&devVals.parsedSepnonceLen)) ){
-            info("[TSSC] manually specified sepnonce to use, parsed \"%s\" to hex:",sepnonce);
+            info("[TSSC] manually specified SepNonce to use, parsed \"%s\" to hex:",sepnonce);
             unsigned char *tmp = (unsigned char*)devVals.sepnonce;
             for (int i=0; i< devVals.parsedSepnonceLen; i++) info("%02x",*tmp++);
             info("\n");
         }else{
-            reterror(-7, "[TSSC] manually specified sepnonce=%s, but parsing failed\n",sepnonce);
+            reterror(-7, "[TSSC] manually specified SepNonce=%s, but parsing failed\n",sepnonce);
         }
     }
     
@@ -365,7 +366,7 @@ int main(int argc, const char * argv[]) {
         if (bbinfo->bbsnumSize == 0) {
             reterror(-8, "[TSSC] this device has no baseband, so it does not make sense to provide BbSNUM.\n");
         }
-        
+
         if ((devVals.bbsnum = (uint8_t *)parseNonce(bbsnum, &devVals.bbsnumSize))) {
             info("[TSSC] manually specified BbSNUM to use, parsed \"%s\" to hex:", bbsnum);
             unsigned char *tmp = devVals.bbsnum;
@@ -380,12 +381,14 @@ int main(int argc, const char * argv[]) {
             reterror(-7, "[TSSC] manually specified bbsnum=%s, but parsing failed\n", bbsnum);
         }
     }
-    
+
     if (!buildmanifest) { //no need to get firmwares/ota json if specifying buildmanifest manually
     reparse:
         firmwareJson = (versVals.isOta) ? getOtaJson() : getFirmwareJson();
-        if (!devVals.installType) //only set this if installType wasn't set manually
-            devVals.isUpdateInstall = (versVals.isOta); //there are no erase installs over OTA
+        /* only set this if installType wasn't set manually */
+        if (!devVals.installType)
+            /* there're no erase installs over OTA */
+            devVals.isUpdateInstall = (versVals.isOta);
         if (!firmwareJson) reterror(-6,"[TSSC] could not get firmware.json\n");
         
         long cnt = parseTokens(firmwareJson, &firmwareTokens);
@@ -404,7 +407,7 @@ int main(int argc, const char * argv[]) {
         int i = 0;
             
         char **versions = getListOfiOSForDevice(firmwareTokens, devVals.deviceModel, versVals.isOta, &versionCnt);
-        if (!versionCnt) reterror(-8, "[TSSC] failed finding latest iOS. If you using --boardconfig please also specify devicemodel with -d ota=%d\n",versVals.isOta);
+        if (!versionCnt) reterror(-8, "[TSSC] failed finding latest iOS. If you using --boardconfig please also specify device model with -d ota=%d\n",versVals.isOta);
         char *bpos = NULL;
         while((bpos = strstr(versVals.version = strdup(versions[i++]),"[B]")) != 0){
             if (versVals.useBeta) break;
@@ -438,7 +441,7 @@ int main(int argc, const char * argv[]) {
         if (isSigned >=0) printf("\n%s %s for device %s %s being signed!\n",(versVals.buildID) ? "Build" : "iOS" ,(versVals.buildID ? versVals.buildID : versVals.version),devVals.deviceModel, (isSigned) ? "IS" : "IS NOT");
         else{
             putchar('\n');
-            reterror(-69, "[TSSC] checking tss status failed!\n");
+            reterror(-69, "[TSSC] checking TSS status failed!\n");
         }
     }
     
