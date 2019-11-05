@@ -27,6 +27,9 @@
 #include <unistd.h>
 #include <curl/curl.h>
 #include <plist/plist.h>
+// lol? missing from new plist.....
+#define _plist_dict_get_uint(a,b) (*(uint64_t*)plist_dict_get_item((a),(b)))
+#define _plist_dict_get_bool _plist_dict_get_uint
 
 #ifdef WIN32
 #include <windows.h>
